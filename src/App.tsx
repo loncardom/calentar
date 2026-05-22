@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { CalendarCheck, PartyPopper, Sparkles, UsersRound } from 'lucide-react';
+import { CalendarCheck, PartyPopper, SunMedium } from 'lucide-react';
 import eventsData from './data/events.json';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
@@ -89,45 +89,35 @@ function App() {
     [filteredEvents],
   );
   const confirmedCount = events.filter((event) => event.status === 'confirmed').length;
-  const attendeeCount = attendees.length;
   const nextEvent = datedEvents[0];
 
   return (
     <div className="app-shell">
-      <header className="hero">
-        <div className="hero-content">
-          <div className="eyebrow">
-            <Sparkles aria-hidden="true" size={18} />
-            Summer 2026
-          </div>
-          <h1>Friend summer plans</h1>
-          <p>
-            A shared snapshot of what is booked, what is tentative, who is coming,
-            how rides work, and what still needs a decision.
-          </p>
-
-          <div className="hero-actions">
-            <ViewToggle view={view} onChange={setView} />
+      <header className="app-header">
+        <div className="brand-lockup">
+          <span className="brand-icon" aria-hidden="true">
+            ☀️
+          </span>
+          <div>
+            <p>Summer 2026</p>
+            <h1>Friend plans</h1>
           </div>
         </div>
-
-        <div className="hero-dashboard" aria-label="Plan summary">
-          <div>
-            <CalendarCheck aria-hidden="true" size={22} />
-            <span>{events.length}</span>
-            <small>Total plans</small>
-          </div>
-          <div>
-            <PartyPopper aria-hidden="true" size={22} />
-            <span>{confirmedCount}</span>
-            <small>Confirmed</small>
-          </div>
-          <div>
-            <UsersRound aria-hidden="true" size={22} />
-            <span>{attendeeCount}</span>
-            <small>Friends</small>
-          </div>
+        <div className="header-stats" aria-label="Plan summary">
+          <span>
+            <CalendarCheck aria-hidden="true" size={15} />
+            {events.length} plans
+          </span>
+          <span>
+            <PartyPopper aria-hidden="true" size={15} />
+            {confirmedCount} confirmed
+          </span>
+          <span>
+            <SunMedium aria-hidden="true" size={15} />
+            {tentativeEvents.length} still planning
+          </span>
         </div>
+        <ViewToggle view={view} onChange={setView} />
       </header>
 
       <main>

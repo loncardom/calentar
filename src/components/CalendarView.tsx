@@ -6,8 +6,8 @@ import {
   eventsOnDay,
   formatMonthYear,
   getEventDateLabel,
-  startOfMonth,
 } from '../utils/dates';
+import { getEventEmoji } from '../utils/presentation';
 
 interface CalendarViewProps {
   monthDate: Date;
@@ -51,13 +51,12 @@ export function CalendarView({
           </button>
         </div>
 
-        <div className="weekday-row" aria-hidden="true">
-          {weekDays.map((day) => (
-            <span key={day}>{day}</span>
-          ))}
-        </div>
-
         <div className="month-grid">
+          {weekDays.map((day) => (
+            <div className="weekday-row" key={day}>
+              {day}
+            </div>
+          ))}
           {days.map((day) => {
             const dayEvents = eventsOnDay(datedEvents, day.date);
             const key = `${day.date.getFullYear()}-${day.date.getMonth()}-${day.date.getDate()}`;
@@ -78,7 +77,9 @@ export function CalendarView({
                       onClick={() => onSelect(event)}
                       key={event.id}
                     >
-                      <span>{event.title}</span>
+                      <span>
+                        {getEventEmoji(event)} {event.title}
+                      </span>
                       <small>{event.startTime || event.dateLabel || 'All day'}</small>
                     </button>
                   ))}
@@ -87,14 +88,6 @@ export function CalendarView({
             );
           })}
         </div>
-
-        <button
-          type="button"
-          className="today-button"
-          onClick={() => onMonthChange(startOfMonth(new Date()))}
-        >
-          Jump to this month
-        </button>
       </div>
 
       <aside className="planning-panel" aria-label="Still planning events">
@@ -113,7 +106,9 @@ export function CalendarView({
                 onClick={() => onSelect(event)}
                 key={event.id}
               >
-                <span>{event.title}</span>
+                <span>
+                  {getEventEmoji(event)} {event.title}
+                </span>
                 <small>{getEventDateLabel(event)}</small>
               </button>
             ))

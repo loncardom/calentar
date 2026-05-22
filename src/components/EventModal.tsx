@@ -6,27 +6,24 @@ import {
   MapPin,
   NotebookTabs,
   PiggyBank,
-  Sparkles,
   UserRound,
-  UsersRound,
   X,
 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 import type { SummerEvent } from '../types/Event';
-import { getEventDateLabel } from '../utils/dates';
+import { formatLongDate, formatTimeRange, parseEventDate } from '../utils/dates';
 import { getGoogleMapsUrl } from '../utils/maps';
+import {
+  getCostBadgeLabel,
+  getEventEmoji,
+  getLocationLine,
+  statusLabel,
+} from '../utils/presentation';
 
 interface EventModalProps {
   event: SummerEvent | null;
   onClose: () => void;
 }
-
-const statusLabel: Record<SummerEvent['status'], string> = {
-  confirmed: 'Confirmed',
-  planning: 'Planning',
-  idea: 'Idea',
-  cancelled: 'Cancelled',
-};
 
 export function EventModal({ event, onClose }: EventModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -81,6 +78,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
   const mapsUrl = getGoogleMapsUrl(event.address, event.locationName, event.city);
   const primaryLink = event.ticketUrl || event.eventUrl;
+  const exactDate = parseEventDate(event.date);
+  const timeLabel = formatTimeRange(event.startTime, event.endTime) || 'TBD';
 
   return (
     <div
@@ -91,67 +90,57 @@ export function EventModal({ event, onClose }: EventModalProps) {
       }}
     >
       <section
-        className={`event-modal category-${event.category}`}
+        className={`event-modal category-${event.category} status-${event.status}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="event-modal-title"
         ref={panelRef}
       >
-        <button
-          type="button"
-          className="icon-button close-button"
-          onClick={onClose}
-          ref={closeButtonRef}
-          aria-label="Close details"
-        >
-          <X aria-hidden="true" size={22} />
-        </button>
-
-        <div className="modal-visual" aria-hidden="true">
-          <div className="visual-art" />
+        <div className="modal-banner" aria-hidden="true">
+          {getEventEmoji(event)}
+          <button
+            type="button"
+            className="modal-close"
+            onClick={onClose}
+            ref={closeButtonRef}
+            aria-label="Close details"
+          >
+            <X aria-hidden="true" size={16} />
+          </button>
         </div>
 
         <div className="modal-content">
-          <div className="modal-kicker">
-            <span className={`status-pill ${event.status}`}>
+          <div className="modal-title-row">
+            <h2 id="event-modal-title">{event.title}</h2>
+            <span className={`status-badge ${event.status}`}>
               {statusLabel[event.status]}
             </span>
-            <span className="category-pill">{event.category}</span>
           </div>
 
-          <h2 id="event-modal-title">{event.title}</h2>
           <p className="modal-description">{event.description}</p>
-
-          <div className="modal-actions">
-            {primaryLink ? (
-              <a href={primaryLink} target="_blank" rel="noreferrer" className="primary-action">
-                <ExternalLink aria-hidden="true" size={18} />
-                Event link
-              </a>
-            ) : null}
-            {mapsUrl ? (
-              <a href={mapsUrl} target="_blank" rel="noreferrer" className="secondary-action">
-                <Map aria-hidden="true" size={18} />
-                Google Maps
-              </a>
-            ) : null}
-          </div>
 
           <dl className="detail-grid">
             <div>
               <dt>
-                <CalendarClock aria-hidden="true" size={18} />
-                Date and time
+                <CalendarClock aria-hidden="true" size={13} />
+                Date
               </dt>
-              <dd>{getEventDateLabel(event, true)}</dd>
+              <dd>{exactDate ? formatLongDate(exactDate) : event.dateLabel || 'TBD'}</dd>
             </div>
             <div>
               <dt>
-                <MapPin aria-hidden="true" size={18} />
+                <CalendarClock aria-hidden="true" size={13} />
+                Time
+              </dt>
+              <dd>{timeLabel}</dd>
+            </div>
+            <div>
+              <dt>
+                <MapPin aria-hidden="true" size={13} />
                 Location
               </dt>
               <dd>
-                {event.locationName || 'Location TBD'}
+                {getLocationLine(event)}
                 {event.address || event.city ? (
                   <span>{[event.address, event.city].filter(Boolean).join(', ')}</span>
                 ) : null}
@@ -159,22 +148,15 @@ export function EventModal({ event, onClose }: EventModalProps) {
             </div>
             <div>
               <dt>
-                <UsersRound aria-hidden="true" size={18} />
-                Attending
+                <PiggyBank aria-hidden="true" size={13} />
+                Cost
               </dt>
-              <dd>{event.attendees.length ? event.attendees.join(', ') : 'TBD'}</dd>
+              <dd>{event.costLabel || getCostBadgeLabel(event)}</dd>
             </div>
             <div>
               <dt>
-                <UserRound aria-hidden="true" size={18} />
-                Organizer
-              </dt>
-              <dd>{event.organizer || 'TBD'}</dd>
-            </div>
-            <div>
-              <dt>
-                <CarFront aria-hidden="true" size={18} />
-                Transportation
+                <CarFront aria-hidden="true" size={13} />
+                Getting there
               </dt>
               <dd>
                 {event.driver ? <strong>{event.driver}</strong> : 'Driver TBD'}
@@ -183,34 +165,30 @@ export function EventModal({ event, onClose }: EventModalProps) {
             </div>
             <div>
               <dt>
-                <PiggyBank aria-hidden="true" size={18} />
-                Cost
+                <UserRound aria-hidden="true" size={13} />
+                Organizer
               </dt>
-              <dd>
-                {event.costLabel || 'Cost TBD'}
-                {event.costAmount !== null && event.currency ? (
-                  <span>
-                    Budget marker: {event.currency} {event.costAmount}
-                  </span>
-                ) : null}
-              </dd>
+              <dd>{event.organizer || 'TBD'}</dd>
             </div>
           </dl>
 
-          <div className="detail-section">
-            <h3>
-              <Sparkles aria-hidden="true" size={18} />
-              Tags
-            </h3>
-            <div className="tag-row">
-              {event.tags.length ? event.tags.map((tag) => <span key={tag}>{tag}</span>) : 'No tags yet'}
+          <div className="attendee-block">
+            <h3>Attendees</h3>
+            <div className="attendee-chips">
+              {event.attendees.length
+                ? event.attendees.map((attendee) => (
+                    <span className="attendee-chip" key={attendee}>
+                      {attendee}
+                    </span>
+                  ))
+                : 'TBD'}
             </div>
           </div>
 
           {event.notes || event.imagePrompt ? (
             <div className="detail-section notes-section">
               <h3>
-                <NotebookTabs aria-hidden="true" size={18} />
+                <NotebookTabs aria-hidden="true" size={14} />
                 Planning notes
               </h3>
               {event.notes ? <p>{event.notes}</p> : null}
@@ -221,6 +199,31 @@ export function EventModal({ event, onClose }: EventModalProps) {
               ) : null}
             </div>
           ) : null}
+
+          <div className="tag-row modal-tags">
+            <span className={`cat-tag tag-${event.category}`}>{event.category}</span>
+            {event.tags.map((tag) => (
+              <span className="soft-tag" key={tag}>
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="modal-actions">
+            {mapsUrl ? (
+              <a href={mapsUrl} target="_blank" rel="noreferrer" className="primary-action">
+                <Map aria-hidden="true" size={16} />
+                Google Maps
+              </a>
+            ) : null}
+            {primaryLink ? (
+              <a href={primaryLink} target="_blank" rel="noreferrer" className="secondary-action">
+                <ExternalLink aria-hidden="true" size={16} />
+                Event link
+              </a>
+            ) : null}
+            {!mapsUrl && !primaryLink ? <span className="no-actions">No links yet</span> : null}
+          </div>
         </div>
       </section>
     </div>
