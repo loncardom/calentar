@@ -1,0 +1,582 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-text-tertiary);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 2rem 0 0.75rem;
+    padding-left: 2px;
+  }
+
+  /* ── NAV BAR ── */
+  .nav {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0;
+  }
+  .nav-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); display: flex; align-items: center; gap: 8px; }
+  .nav-emoji { font-size: 20px; }
+  .nav-right { display: flex; align-items: center; gap: 8px; }
+  .view-toggle {
+    display: flex;
+    background: var(--color-background-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 3px;
+    gap: 2px;
+  }
+  .view-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 5px;
+    color: var(--color-text-secondary);
+    background: transparent;
+  }
+  .view-btn.active {
+    background: var(--color-background-primary);
+    color: var(--color-text-primary);
+    border: 0.5px solid var(--color-border-secondary);
+  }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .search-box {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-secondary);
+    border-radius: var(--border-radius-md);
+    padding: 6px 10px;
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    flex: 1; min-width: 160px;
+  }
+  .filter-chip {
+    display: flex; align-items: center; gap: 5px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-primary);
+    color: var(--color-text-secondary);
+  }
+  .filter-chip.active-chip {
+    background: #EEEDFE;
+    color: #3C3489;
+    border-color: #AFA9EC;
+  }
+
+  /* ── EVENT CARDS ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+  }
+  .event-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .event-card:hover { border-color: var(--color-border-primary); }
+  .card-banner {
+    height: 72px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px;
+    position: relative;
+  }
+  .card-banner.beach    { background: linear-gradient(135deg,#B5D4F4 0%,#9FE1CB 100%); }
+  .card-banner.movie    { background: linear-gradient(135deg,#CDA9EC 0%,#F4C0D1 100%); }
+  .card-banner.concert  { background: linear-gradient(135deg,#FAC775 0%,#F0997B 100%); }
+  .card-banner.cottage  { background: linear-gradient(135deg,#C0DD97 0%,#9FE1CB 100%); }
+  .card-banner.skydive  { background: linear-gradient(135deg,#85B7EB 0%,#CDA9EC 100%); }
+  .card-banner.dinner   { background: linear-gradient(135deg,#FAC775 0%,#F7C1C1 100%); }
+  .card-body { padding: 10px 12px 12px; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+  .card-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); line-height: 1.35; }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%; margin-top: 4px; flex-shrink: 0;
+  }
+  .dot-confirmed { background: #639922; }
+  .dot-planning  { background: #BA7517; }
+  .dot-idea      { background: #888780; }
+  .card-date { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
+  .card-location { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+  .card-footer { display: flex; align-items: center; justify-content: space-between; }
+  .avatars { display: flex; }
+  .avatar {
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px; font-weight: 500;
+    border: 1.5px solid var(--color-background-primary);
+    margin-left: -5px;
+  }
+  .avatar:first-child { margin-left: 0; }
+  .av-a { background:#EEEDFE; color:#3C3489; }
+  .av-b { background:#E1F5EE; color:#0F6E56; }
+  .av-c { background:#FAECE7; color:#993C1D; }
+  .av-d { background:#E6F1FB; color:#185FA5; }
+  .cost-badge {
+    font-size: 11px; font-weight: 500;
+    padding: 2px 7px; border-radius: 10px;
+    background: #EAF3DE; color: #3B6D11;
+  }
+  .cost-badge.free { background: #E1F5EE; color: #0F6E56; }
+  .cost-badge.tbd  { background: var(--color-background-secondary); color: var(--color-text-tertiary); }
+
+  .cat-tag {
+    font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 500;
+    margin-right: 4px;
+  }
+  .tag-outdoor { background:#E1F5EE; color:#0F6E56; }
+  .tag-show    { background:#EEEDFE; color:#3C3489; }
+  .tag-movie   { background:#FBEAF0; color:#72243E; }
+  .tag-trip    { background:#E6F1FB; color:#185FA5; }
+  .tag-food    { background:#FAEEDA; color:#854F0B; }
+  .tag-other   { background: var(--color-background-secondary); color: var(--color-text-secondary); }
+
+  /* ── TENTATIVE SECTION ── */
+  .tentative-row {
+    display: flex; gap: 10px; flex-wrap: wrap;
+  }
+  .tentative-card {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--color-background-primary);
+    border: 0.5px dashed var(--color-border-secondary);
+    border-radius: var(--border-radius-lg);
+    padding: 10px 14px;
+    flex: 1; min-width: 180px; cursor: pointer;
+  }
+  .tentative-icon {
+    width: 36px; height: 36px; border-radius: var(--border-radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    background: var(--color-background-secondary);
+  }
+  .tentative-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tentative-sub   { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  /* ── MODAL ── */
+  .modal-backdrop {
+    min-height: 420px;
+    background: rgba(0,0,0,0.38);
+    display: flex; align-items: center; justify-content: center;
+    border-radius: var(--border-radius-lg);
+    padding: 16px;
+  }
+  .modal {
+    background: var(--color-background-primary);
+    border-radius: var(--border-radius-lg);
+    border: 0.5px solid var(--color-border-tertiary);
+    width: 100%; max-width: 460px;
+    overflow: hidden;
+  }
+  .modal-banner {
+    height: 90px;
+    background: linear-gradient(135deg,#B5D4F4 0%,#9FE1CB 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px;
+    position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 10px; right: 12px;
+    background: rgba(255,255,255,0.7); border: none; cursor: pointer;
+    border-radius: 50%; width: 26px; height: 26px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #444;
+  }
+  .modal-body { padding: 16px 20px 20px; }
+  .modal-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .modal-title { font-size: 18px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+  .confirmed-badge {
+    font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 12px;
+    background: #EAF3DE; color: #3B6D11;
+  }
+  .modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-bottom: 14px; }
+  .modal-field label { font-size: 11px; color: var(--color-text-tertiary); display: block; margin-bottom: 2px; }
+  .modal-field span  { font-size: 13px; color: var(--color-text-primary); }
+  .modal-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 14px; }
+  .modal-actions { display: flex; gap: 8px; }
+  .btn-primary {
+    flex: 1; padding: 8px; border-radius: var(--border-radius-md);
+    background: #534AB7; color: #fff; border: none; font-size: 13px;
+    font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-secondary {
+    flex: 1; padding: 8px; border-radius: var(--border-radius-md);
+    background: var(--color-background-secondary); color: var(--color-text-primary);
+    border: 0.5px solid var(--color-border-secondary); font-size: 13px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .attendee-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .attendee-chip {
+    font-size: 11px; padding: 3px 9px; border-radius: 20px;
+    background: var(--color-background-secondary); color: var(--color-text-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+  }
+
+  /* ── CALENDAR ── */
+  .cal-wrap {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+  }
+  .cal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .cal-month { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+  .cal-nav-btn {
+    background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md);
+    width: 28px; height: 28px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-text-secondary); font-size: 14px;
+  }
+  .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); }
+  .cal-day-label {
+    text-align: center; font-size: 10px; color: var(--color-text-tertiary);
+    font-weight: 500; padding: 8px 0 4px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+  .cal-cell {
+    min-height: 56px; padding: 4px; border-right: 0.5px solid var(--color-border-tertiary);
+    border-bottom: 0.5px solid var(--color-border-tertiary); font-size: 11px;
+    vertical-align: top; position: relative;
+  }
+  .cal-cell:nth-child(7n) { border-right: none; }
+  .cal-num { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 3px; font-weight: 500; }
+  .cal-num.today {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #534AB7; color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+  }
+  .cal-event-pill {
+    font-size: 10px; font-weight: 500; border-radius: 4px;
+    padding: 1px 5px; margin-bottom: 2px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    cursor: pointer;
+  }
+  .pill-blue   { background: #B5D4F4; color: #185FA5; }
+  .pill-pink   { background: #F4C0D1; color: #72243E; }
+  .pill-amber  { background: #FAC775; color: #854F0B; }
+  .pill-green  { background: #C0DD97; color: #3B6D11; }
+  .cal-faded { color: var(--color-border-secondary) !important; }
+  .cal-tentative-panel {
+    padding: 10px 14px 14px;
+    border-top: 0.5px solid var(--color-border-tertiary);
+  }
+  .cal-tent-label { font-size: 11px; color: var(--color-text-tertiary); font-weight: 500; margin-bottom: 6px; }
+  .cal-tent-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+  .cal-tent-pill {
+    font-size: 11px; padding: 3px 10px; border-radius: 20px;
+    background: var(--color-background-secondary); color: var(--color-text-secondary);
+    border: 0.5px dashed var(--color-border-secondary);
+  }
+</style>
+
+<h2 class="sr-only">Summer plans tracker UX mockups — navbar, event tiles, modal, and calendar view</h2>
+
+<p class="section-label">Navigation + filters</p>
+
+<div class="nav">
+  <div class="nav-title">
+    <span class="nav-emoji">☀️</span>
+    Summer 2025
+  </div>
+  <div class="nav-right">
+    <div class="view-toggle">
+      <button class="view-btn active"><i class="ti ti-layout-grid" aria-hidden="true"></i> Tiles</button>
+      <button class="view-btn"><i class="ti ti-calendar" aria-hidden="true"></i> Calendar</button>
+    </div>
+  </div>
+</div>
+
+<div class="filter-bar" style="margin-top:10px;">
+  <div class="search-box"><i class="ti ti-search" style="font-size:14px" aria-hidden="true"></i> Search events…</div>
+  <button class="filter-chip active-chip">All</button>
+  <button class="filter-chip"><i class="ti ti-circle-check" style="font-size:13px" aria-hidden="true"></i> Confirmed</button>
+  <button class="filter-chip"><i class="ti ti-clock" style="font-size:13px" aria-hidden="true"></i> Planning</button>
+  <button class="filter-chip">🏖 Outdoor</button>
+  <button class="filter-chip">🎭 Show</button>
+  <button class="filter-chip">Sofia</button>
+</div>
+
+<p class="section-label">Event tiles</p>
+
+<div class="cards-grid">
+
+  <div class="event-card">
+    <div class="card-banner beach">🏖️</div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-title">Wasaga Beach Day</div>
+        <div class="status-dot dot-confirmed"></div>
+      </div>
+      <div class="card-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> Jul 19 · All day</div>
+      <div class="card-location"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> Wasaga Beach, ON</div>
+      <div class="card-footer">
+        <div class="avatars">
+          <div class="avatar av-a">SJ</div>
+          <div class="avatar av-b">ML</div>
+          <div class="avatar av-c">TR</div>
+          <div class="avatar av-d">+2</div>
+        </div>
+        <div class="cost-badge">~$20</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="card-banner movie">🎬</div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-title">Movie Night @ Dan's</div>
+        <div class="status-dot dot-confirmed"></div>
+      </div>
+      <div class="card-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> Jul 26 · 7:30 PM</div>
+      <div class="card-location"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> Dan's place, Toronto</div>
+      <div class="card-footer">
+        <div class="avatars">
+          <div class="avatar av-b">ML</div>
+          <div class="avatar av-c">TR</div>
+          <div class="avatar av-a">SJ</div>
+        </div>
+        <div class="cost-badge free">Free</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="card-banner concert">🎩</div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-title">Penn & Teller</div>
+        <div class="status-dot dot-confirmed"></div>
+      </div>
+      <div class="card-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> Aug 3 · 8:00 PM</div>
+      <div class="card-location"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> Meridian Hall, Toronto</div>
+      <div class="card-footer">
+        <div class="avatars">
+          <div class="avatar av-a">SJ</div>
+          <div class="avatar av-b">ML</div>
+        </div>
+        <div class="cost-badge">$85</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="card-banner cottage">🌲</div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-title">Muskoka Cottage</div>
+        <div class="status-dot dot-planning"></div>
+      </div>
+      <div class="card-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> Aug 15–18</div>
+      <div class="card-location"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> Huntsville, ON</div>
+      <div class="card-footer">
+        <div class="avatars">
+          <div class="avatar av-c">TR</div>
+          <div class="avatar av-a">SJ</div>
+          <div class="avatar av-b">ML</div>
+          <div class="avatar av-d">+3</div>
+        </div>
+        <div class="cost-badge">~$180</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="event-card">
+    <div class="card-banner dinner">🍜</div>
+    <div class="card-body">
+      <div class="card-top">
+        <div class="card-title">Ramen Dinner Night</div>
+        <div class="status-dot dot-planning"></div>
+      </div>
+      <div class="card-date"><i class="ti ti-calendar" style="font-size:11px" aria-hidden="true"></i> Late July</div>
+      <div class="card-location"><i class="ti ti-map-pin" style="font-size:11px" aria-hidden="true"></i> Kenzo Ramen, Toronto</div>
+      <div class="card-footer">
+        <div class="avatars">
+          <div class="avatar av-a">SJ</div>
+          <div class="avatar av-d">+3</div>
+        </div>
+        <div class="cost-badge tbd">~$35</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<p class="section-label">Still planning ✦ tentative events</p>
+
+<div class="tentative-row">
+  <div class="tentative-card">
+    <div class="tentative-icon">🪂</div>
+    <div>
+      <div class="tentative-title">Skydiving</div>
+      <div class="tentative-sub">Sometime in August · ~$250</div>
+    </div>
+  </div>
+  <div class="tentative-card">
+    <div class="tentative-icon">🎬</div>
+    <div>
+      <div class="tentative-title">Outdoor Movie</div>
+      <div class="tentative-sub">August weeknight · Free</div>
+    </div>
+  </div>
+  <div class="tentative-card">
+    <div class="tentative-icon">🚣</div>
+    <div>
+      <div class="tentative-title">Kayaking Trip</div>
+      <div class="tentative-sub">No date yet · ~$60</div>
+    </div>
+  </div>
+</div>
+
+<p class="section-label">Event detail modal</p>
+
+<div class="modal-backdrop">
+  <div class="modal">
+    <div class="modal-banner">🏖️
+      <button class="modal-close" aria-label="Close"><i class="ti ti-x" style="font-size:14px" aria-hidden="true"></i></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-title-row">
+        <div class="modal-title">Wasaga Beach Day</div>
+        <div class="confirmed-badge"><i class="ti ti-circle-check" style="font-size:11px" aria-hidden="true"></i> Confirmed</div>
+      </div>
+      <div class="modal-grid">
+        <div class="modal-field">
+          <label><i class="ti ti-calendar" style="font-size:10px" aria-hidden="true"></i> Date</label>
+          <span>Saturday, Jul 19</span>
+        </div>
+        <div class="modal-field">
+          <label><i class="ti ti-clock" style="font-size:10px" aria-hidden="true"></i> Time</label>
+          <span>All day</span>
+        </div>
+        <div class="modal-field">
+          <label><i class="ti ti-map-pin" style="font-size:10px" aria-hidden="true"></i> Location</label>
+          <span>Wasaga Beach, ON</span>
+        </div>
+        <div class="modal-field">
+          <label><i class="ti ti-currency-dollar" style="font-size:10px" aria-hidden="true"></i> Cost</label>
+          <span>~$20 per person</span>
+        </div>
+        <div class="modal-field">
+          <label><i class="ti ti-car" style="font-size:10px" aria-hidden="true"></i> Getting there</label>
+          <span>Sofia driving 🚗</span>
+        </div>
+        <div class="modal-field">
+          <label><i class="ti ti-tag" style="font-size:10px" aria-hidden="true"></i> Category</label>
+          <span><span class="cat-tag tag-outdoor">outdoor</span></span>
+        </div>
+      </div>
+      <p class="modal-desc">A full day at the beach — bring chairs, sunscreen, and snacks. Sofia's car fits 4. Meet at her place at 9am for a 9:30 departure.</p>
+      <div style="margin-bottom:12px;">
+        <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:5px;">Attendees</div>
+        <div class="attendee-chips">
+          <div class="attendee-chip">Sofia</div>
+          <div class="attendee-chip">Marco</div>
+          <div class="attendee-chip">Tara</div>
+          <div class="attendee-chip">Remy</div>
+          <div class="attendee-chip">Jin</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-primary"><i class="ti ti-map-pin" style="font-size:14px" aria-hidden="true"></i> Google Maps</button>
+        <button class="btn-secondary"><i class="ti ti-external-link" style="font-size:14px" aria-hidden="true"></i> Event link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="section-label">Calendar view</p>
+
+<div class="cal-wrap">
+  <div class="cal-header">
+    <button class="cal-nav-btn" aria-label="Previous month"><i class="ti ti-chevron-left" style="font-size:14px" aria-hidden="true"></i></button>
+    <div class="cal-month">July 2025</div>
+    <button class="cal-nav-btn" aria-label="Next month"><i class="ti ti-chevron-right" style="font-size:14px" aria-hidden="true"></i></button>
+  </div>
+  <div class="cal-grid">
+    <div class="cal-day-label">Sun</div>
+    <div class="cal-day-label">Mon</div>
+    <div class="cal-day-label">Tue</div>
+    <div class="cal-day-label">Wed</div>
+    <div class="cal-day-label">Thu</div>
+    <div class="cal-day-label">Fri</div>
+    <div class="cal-day-label">Sat</div>
+
+    <div class="cal-cell"><div class="cal-num cal-faded">29</div></div>
+    <div class="cal-cell"><div class="cal-num cal-faded">30</div></div>
+    <div class="cal-cell"><div class="cal-num">1</div></div>
+    <div class="cal-cell"><div class="cal-num">2</div></div>
+    <div class="cal-cell"><div class="cal-num">3</div></div>
+    <div class="cal-cell"><div class="cal-num">4</div></div>
+    <div class="cal-cell"><div class="cal-num">5</div></div>
+
+    <div class="cal-cell"><div class="cal-num">6</div></div>
+    <div class="cal-cell"><div class="cal-num">7</div></div>
+    <div class="cal-cell"><div class="cal-num">8</div></div>
+    <div class="cal-cell"><div class="cal-num">9</div></div>
+    <div class="cal-cell"><div class="cal-num">10</div></div>
+    <div class="cal-cell"><div class="cal-num">11</div></div>
+    <div class="cal-cell"><div class="cal-num">12</div></div>
+
+    <div class="cal-cell"><div class="cal-num">13</div></div>
+    <div class="cal-cell"><div class="cal-num">14</div></div>
+    <div class="cal-cell"><div class="cal-num">15</div></div>
+    <div class="cal-cell"><div class="cal-num">16</div></div>
+    <div class="cal-cell"><div class="cal-num">17</div></div>
+    <div class="cal-cell"><div class="cal-num">18</div></div>
+    <div class="cal-cell"><div class="cal-num">19</div><div class="cal-event-pill pill-blue">🏖 Beach Day</div></div>
+
+    <div class="cal-cell"><div class="cal-num today">20</div></div>
+    <div class="cal-cell"><div class="cal-num">21</div></div>
+    <div class="cal-cell"><div class="cal-num">22</div></div>
+    <div class="cal-cell"><div class="cal-num">23</div></div>
+    <div class="cal-cell"><div class="cal-num">24</div></div>
+    <div class="cal-cell"><div class="cal-num">25</div></div>
+    <div class="cal-cell"><div class="cal-num">26</div><div class="cal-event-pill pill-pink">🎬 Movie Nite</div></div>
+
+    <div class="cal-cell"><div class="cal-num">27</div></div>
+    <div class="cal-cell"><div class="cal-num">28</div></div>
+    <div class="cal-cell"><div class="cal-num">29</div></div>
+    <div class="cal-cell"><div class="cal-num">30</div></div>
+    <div class="cal-cell"><div class="cal-num">31</div></div>
+    <div class="cal-cell"><div class="cal-num cal-faded">1</div></div>
+    <div class="cal-cell"><div class="cal-num cal-faded">2</div></div>
+  </div>
+  <div class="cal-tentative-panel">
+    <div class="cal-tent-label">No date yet — still planning</div>
+    <div class="cal-tent-pills">
+      <div class="cal-tent-pill">🪂 Skydiving</div>
+      <div class="cal-tent-pill">🎬 Outdoor Movie</div>
+      <div class="cal-tent-pill">🍜 Ramen Night</div>
+    </div>
+  </div>
+</div>

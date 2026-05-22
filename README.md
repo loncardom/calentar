@@ -36,23 +36,18 @@ The static build is written to `dist/`.
 
 ## Deploy To GitHub Pages
 
-This project uses `base: './'` in [`vite.config.ts`](vite.config.ts), so the built assets work on project pages as well as custom domains.
+This project uses `base: './'` in [`vite.config.ts`](vite.config.ts), so the built assets work on project pages, user pages, and custom domains.
 
-One simple GitHub Pages workflow is:
+The included workflow at [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml) builds the app and publishes `dist/`.
 
-1. Build with `npm run build`.
-2. Upload or publish the `dist/` folder to GitHub Pages.
-3. If using GitHub Actions, configure the Pages action to build the app and deploy `dist/`.
+1. Push the repository to GitHub.
+2. In the repository settings, go to **Settings -> Pages**.
+3. Set **Build and deployment -> Source** to **GitHub Actions**.
+4. Push to `main`, or run the **Deploy GitHub Pages** workflow manually from the Actions tab.
 
-Example build steps for an action:
+If the repository is named `<username>.github.io`, it publishes at `https://<username>.github.io/`. If the repository has another name, it publishes at `https://<username>.github.io/<repository-name>/`.
 
-```yaml
-- uses: actions/setup-node@v4
-  with:
-    node-version: 20
-- run: npm ci
-- run: npm run build
-```
+GitHub Pages can take a few minutes to update after the workflow completes.
 
 ## Run With Docker And Nginx
 
