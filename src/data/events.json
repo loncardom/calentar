@@ -214,5 +214,32 @@
     "imagePrompt": "A cheerful farmers market brunch scene with baskets of fruit, iced coffee, pastries, sun hats, and leafy ravine paths.",
     "tags": ["brunch", "market", "walk", "morning"],
     "notes": "Pick a date after checking who is away in July."
+  },
+  {
+    "id": "beehive-beard",
+    "title": "Beehive Beard",
+    "status": "planning",
+    "category": "other",
+    "date": null,
+    "startTime": null,
+    "endTime": null,
+    "dateLabel": "date TBD",
+    "locationName": "TBD",
+    "address": null,
+    "city": null,
+    "description": "Beehive Beard event with Done and Andy.",
+    "attendees": ["Done", "Andy"],
+    "organizer": null,
+    "driver": null,
+    "transportationNotes": null,
+    "costLabel": "$400",
+    "costAmount": 400,
+    "currency": "CAD",
+    "ticketUrl": null,
+    "eventUrl": null,
+    "image": null,
+    "imagePrompt": null,
+    "tags": ["beehive", "beard"],
+    "notes": null
   }
 ]
