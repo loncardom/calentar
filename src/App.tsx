@@ -6,7 +6,7 @@ import { EventCard } from './components/EventCard';
 import { EventModal } from './components/EventModal';
 import { Filters, type FilterState } from './components/Filters';
 import { ViewToggle } from './components/ViewToggle';
-import type { EventCategory, EventStatus, EventView, SummerEvent } from './types/Event';
+import type { EventStatus, EventView, SummerEvent } from './types/Event';
 import {
   hasExactDate,
   parseEventDate,
@@ -17,30 +17,8 @@ import {
 const events = eventsData as SummerEvent[];
 
 const defaultFilters: FilterState = {
-  search: '',
   status: 'all',
-  category: 'all',
   attendee: 'all',
-};
-
-const matchesSearch = (event: SummerEvent, search: string): boolean => {
-  const query = search.trim().toLowerCase();
-  if (!query) return true;
-
-  return [
-    event.title,
-    event.locationName,
-    event.address,
-    event.city,
-    event.description,
-    event.notes,
-    event.dateLabel,
-    event.transportationNotes,
-    ...event.attendees,
-    ...event.tags,
-  ]
-    .filter(Boolean)
-    .some((value) => String(value).toLowerCase().includes(query));
 };
 
 function App() {
@@ -54,10 +32,6 @@ function App() {
   const [selectedEvent, setSelectedEvent] = useState<SummerEvent | null>(null);
   const [monthDate, setMonthDate] = useState<Date>(initialMonth);
 
-  const categories = useMemo(
-    () => Array.from(new Set(events.map((event) => event.category))).sort() as EventCategory[],
-    [],
-  );
   const statuses = useMemo(
     () => Array.from(new Set(events.map((event) => event.status))).sort() as EventStatus[],
     [],
@@ -71,11 +45,10 @@ function App() {
     () =>
       events.filter((event) => {
         if (filters.status !== 'all' && event.status !== filters.status) return false;
-        if (filters.category !== 'all' && event.category !== filters.category) return false;
         if (filters.attendee !== 'all' && !event.attendees.includes(filters.attendee)) {
           return false;
         }
-        return matchesSearch(event, filters.search);
+        return true;
       }),
     [filters],
   );
@@ -123,7 +96,6 @@ function App() {
       <main>
         <Filters
           filters={filters}
-          categories={categories}
           statuses={statuses}
           attendees={attendees}
           onChange={setFilters}
