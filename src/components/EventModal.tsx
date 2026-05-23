@@ -28,6 +28,48 @@ interface EventModalProps {
 export function EventModal({ event, onClose }: EventModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
+  const onCloseRef = useRef(onClose);
+  const modalHistoryEntryRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  }, [onClose]);
+
+  useEffect(() => {
+    if (!event) return undefined;
+
+    const modalHistoryEntry = `event-modal-${event.id}`;
+    modalHistoryEntryRef.current = modalHistoryEntry;
+    window.history.pushState(
+      {
+        ...(window.history.state ?? {}),
+        modalHistoryEntry,
+      },
+      '',
+      window.location.href,
+    );
+
+    const handlePopState = () => {
+      if (modalHistoryEntryRef.current !== modalHistoryEntry) return;
+
+      modalHistoryEntryRef.current = null;
+      onCloseRef.current();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+
+      if (
+        modalHistoryEntryRef.current === modalHistoryEntry &&
+        window.history.state?.modalHistoryEntry === modalHistoryEntry
+      ) {
+        modalHistoryEntryRef.current = null;
+        window.history.back();
+      }
+    };
+  }, [event]);
 
   useEffect(() => {
     if (!event) return undefined;
