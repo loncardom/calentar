@@ -23,7 +23,6 @@
     "eventUrl": null,
     "image": null,
     "imagePrompt": "A cozy movie night setup for watching Dune, with desert sci-fi tones, snacks, a couch, and cinematic lighting.",
-    "tags": ["movie", "dune", "low-key"],
     "notes": "Confirm whether this is happening on May 30 or May 31."
   },
   {
@@ -50,7 +49,6 @@
     "eventUrl": null,
     "image": null,
     "imagePrompt": "A tense horror movie watch party at home with friends, dim lighting, snacks, and a spooky summer night mood.",
-    "tags": ["movie", "horror", "watch party"],
     "notes": "Pick a June date and confirm who is coming."
   },
   {
@@ -77,7 +75,6 @@
     "eventUrl": "https://fallsviewcasinoresort.com/entertainment",
     "image": null,
     "imagePrompt": "A vibrant magic show poster style image with red theatre curtains, stage lights, playing cards, and a summery road trip mood.",
-    "tags": ["magic", "tickets", "night out"],
     "notes": null
   },
   {
@@ -104,7 +101,6 @@
     "eventUrl": null,
     "image": null,
     "imagePrompt": "A summer Toronto Island day with kayaking, skyline views, friends meeting by the water, and a casual outdoor cleanup adventure mood.",
-    "tags": ["kayaking", "toronto island", "trash dash", "outdoor"],
     "notes": "Kayaking runs 10 AM to 1 PM. Dom, Brett, and Andy are in for everything; Janique and Riley join at 1 PM at Toronto Island."
   },
   {
@@ -131,7 +127,6 @@
     "eventUrl": null,
     "image": null,
     "imagePrompt": "A summer day at Elora Gorge with river tubing, limestone cliffs, clear water, and a relaxed group adventure feel.",
-    "tags": ["tubing", "swimming", "elora", "not fully planned"],
     "notes": "Pick a date in June or July and confirm who is coming."
   },
   {
@@ -158,7 +153,6 @@
     "eventUrl": "https://skydivetoronto.com/",
     "image": null,
     "imagePrompt": "A bold skydiving themed summer image with a bright blue sky, parachutes, clouds, and a playful adventure poster feel.",
-    "tags": ["bucket list", "adrenaline", "road trip", "weather-dependent"],
     "notes": "Check deposit rules and whether video packages are worth it."
   },
   {
@@ -174,7 +168,7 @@
     "address": "6214 Appleby Line",
     "city": "Burlington, ON",
     "description": "Bee Beard Experience at Backed By Bees.",
-    "attendees": ["Andy"],
+    "attendees": ["Dom", "Brett", "Andy"],
     "organizer": null,
     "driver": null,
     "transportationNotes": null,
@@ -185,7 +179,6 @@
     "eventUrl": "https://backedbybees.com/pages/contact-us",
     "image": null,
     "imagePrompt": "A bold beekeeper experience with a bee beard, protective gear, honey farm setting, and warm summer morning light.",
-    "tags": ["bees", "beekeeper", "experience", "booking needed"],
     "notes": "Backed By Bees contact page lists the location as 6214 Appleby Line, Burlington. Confirm final booking details and cost."
   },
   {
@@ -212,7 +205,6 @@
     "eventUrl": "https://targetsportsyyz.com/",
     "image": null,
     "imagePrompt": "A clean modern indoor activity experience with friends, safety gear, lane lighting, and a controlled supervised environment.",
-    "tags": ["indoor", "supervised", "booking needed"],
     "notes": "Review venue requirements and booking details before going."
   },
   {
@@ -239,7 +231,6 @@
     "eventUrl": "https://www.sosaglidingclub.com/introductory-flights",
     "image": null,
     "imagePrompt": "A quiet summer glider flight over Southern Ontario, with a white glider, open sky, farmland, and a calm adventure mood.",
-    "tags": ["gliding", "flight", "outdoor", "booking needed"],
     "notes": "Intro flights are about 20-30 minutes with one passenger at a time. Flight must be pre-purchased online before scheduling."
   }
 ]
