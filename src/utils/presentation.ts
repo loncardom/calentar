@@ -19,24 +19,24 @@ export const statusLabel: Record<SummerEvent['status'], string> = {
 };
 
 export const getEventEmoji = (event: SummerEvent): string => {
-  const searchable = `${event.title} ${event.category}`.toLowerCase();
+  const title = event.title.toLowerCase();
 
-  if (searchable.includes('skydiv')) return 'S';
-  if (searchable.includes('beach')) return 'B';
-  if (searchable.includes('cottage') || searchable.includes('lake')) return 'L';
-  if (searchable.includes('dinner') || searchable.includes('brunch') || searchable.includes('food')) {
-    return 'F';
-  }
-  if (searchable.includes('penn') || searchable.includes('magic')) return 'M';
-  if (searchable.includes('concert')) return 'C';
+  if (title.includes('dune') || title.includes('smile')) return '🎬';
+  if (title.includes('penn')) return '🎩';
+  if (title.includes('trash dash') || title.includes('island')) return '🛶';
+  if (title.includes('elora') || title.includes('tubing')) return '🌊';
+  if (title.includes('skydiv')) return '🪂';
+  if (title.includes('bee')) return '🐝';
+  if (title.includes('target')) return '🎯';
+  if (title.includes('gliding')) return '🛩️';
 
   const categoryEmoji: Record<SummerEvent['category'], string> = {
-    movie: 'M',
-    show: 'S',
-    trip: 'T',
-    outdoor: 'O',
-    food: 'F',
-    other: 'O',
+    movie: '🎬',
+    show: '🎭',
+    trip: '🚗',
+    outdoor: '☀️',
+    food: '🍽️',
+    other: '✨',
   };
 
   return categoryEmoji[event.category];
