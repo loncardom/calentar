@@ -6,7 +6,7 @@ import { EventCard } from './components/EventCard';
 import { EventModal } from './components/EventModal';
 import { Filters, type FilterState } from './components/Filters';
 import { ViewToggle } from './components/ViewToggle';
-import type { EventStatus, EventView, SummerEvent } from './types/Event';
+import type { EventView, SummerEvent } from './types/Event';
 import {
   hasExactDate,
   parseEventDate,
@@ -17,7 +17,6 @@ import {
 const events = eventsData as SummerEvent[];
 
 const defaultFilters: FilterState = {
-  status: 'all',
   attendee: 'all',
 };
 
@@ -32,10 +31,6 @@ function App() {
   const [selectedEvent, setSelectedEvent] = useState<SummerEvent | null>(null);
   const [monthDate, setMonthDate] = useState<Date>(initialMonth);
 
-  const statuses = useMemo(
-    () => Array.from(new Set(events.map((event) => event.status))).sort() as EventStatus[],
-    [],
-  );
   const attendees = useMemo(
     () => Array.from(new Set(events.flatMap((event) => event.attendees))).sort(),
     [],
@@ -44,7 +39,6 @@ function App() {
   const filteredEvents = useMemo(
     () =>
       events.filter((event) => {
-        if (filters.status !== 'all' && event.status !== filters.status) return false;
         if (filters.attendee !== 'all' && !event.attendees.includes(filters.attendee)) {
           return false;
         }
@@ -94,12 +88,7 @@ function App() {
       </header>
 
       <main>
-        <Filters
-          filters={filters}
-          statuses={statuses}
-          attendees={attendees}
-          onChange={setFilters}
-        />
+        <Filters filters={filters} attendees={attendees} onChange={setFilters} />
 
         <section className="summary-strip" aria-label="Current selection summary">
           <p>
