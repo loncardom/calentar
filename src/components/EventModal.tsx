@@ -200,15 +200,6 @@ export function EventModal({ event, onClose }: EventModalProps) {
             </div>
           ) : null}
 
-          <div className="tag-row modal-tags">
-            <span className={`cat-tag tag-${event.category}`}>{event.category}</span>
-            {event.tags.map((tag) => (
-              <span className="soft-tag" key={tag}>
-                {tag}
-              </span>
-            ))}
-          </div>
-
           <div className="modal-actions">
             {mapsUrl ? (
               <a href={mapsUrl} target="_blank" rel="noreferrer" className="primary-action">
