@@ -1,4 +1,15 @@
+import friendsData from '../data/friends.json';
 import type { SummerEvent } from '../types/Event';
+
+interface Friend {
+  name: string;
+  initials: string;
+}
+
+const friends = friendsData as Friend[];
+const friendInitialsByName = new Map(
+  friends.map((friend) => [friend.name.toLowerCase(), friend.initials.toUpperCase()]),
+);
 
 export const statusLabel: Record<SummerEvent['status'], string> = {
   confirmed: 'Confirmed',
@@ -32,6 +43,9 @@ export const getEventEmoji = (event: SummerEvent): string => {
 };
 
 export const getInitials = (name: string): string => {
+  const friendInitials = friendInitialsByName.get(name.trim().toLowerCase());
+  if (friendInitials) return friendInitials;
+
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (!parts.length) return '?';
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
