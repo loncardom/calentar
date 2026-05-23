@@ -81,15 +81,6 @@ export function EventCard({ event, onSelect, compact = false }: EventCardProps) 
           {getLocationLine(event)}
         </p>
 
-        <div className="card-tags">
-          <span className={`cat-tag tag-${event.category}`}>{event.category}</span>
-          {event.tags.slice(0, 1).map((tag) => (
-            <span className="soft-tag" key={tag}>
-              {tag}
-            </span>
-          ))}
-        </div>
-
         <div className="card-footer">
           <div className="avatars" aria-label="Attendees">
             {visibleAttendees.map((attendee, index) => (
