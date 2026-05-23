@@ -32,7 +32,6 @@ export interface SummerEvent {
   eventUrl: string | null;
   image: string | null;
   imagePrompt: string | null;
-  tags: string[];
   notes: string | null;
 }
 
