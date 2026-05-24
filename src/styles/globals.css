@@ -207,12 +207,6 @@ main {
 .filters {
   display: flex;
   justify-content: flex-end;
-  padding: 10px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: rgba(255, 253, 248, 0.78);
-  box-shadow: 0 12px 28px rgba(49, 45, 36, 0.06);
-  backdrop-filter: blur(12px);
 }
 
 .filter-selects {
@@ -244,6 +238,7 @@ main {
 
 .summary-strip {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 12px;
   color: var(--muted);
@@ -658,7 +653,7 @@ main {
 
 .calendar-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   align-items: start;
 }
@@ -773,9 +768,20 @@ main {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   font-size: 0.67rem;
   font-weight: 780;
+}
+
+.calendar-event span {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.planning-item span {
+  white-space: nowrap;
 }
 
 .calendar-event small {
