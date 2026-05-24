@@ -1,31 +1,18 @@
-import { ChevronLeft, ChevronRight, CalendarClock } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { SummerEvent } from '../types/Event';
-import {
-  addMonths,
-  buildMonthGrid,
-  eventsOnDay,
-  formatMonthYear,
-  getEventDateLabel,
-} from '../utils/dates';
+import { addMonths, buildMonthGrid, eventsOnDay, formatMonthYear } from '../utils/dates';
 import { getEventEmoji } from '../utils/presentation';
 
 interface CalendarViewProps {
   monthDate: Date;
   datedEvents: SummerEvent[];
-  tentativeEvents: SummerEvent[];
   onMonthChange: (date: Date) => void;
   onSelect: (event: SummerEvent) => void;
 }
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export function CalendarView({
-  monthDate,
-  datedEvents,
-  tentativeEvents,
-  onMonthChange,
-  onSelect,
-}: CalendarViewProps) {
+export function CalendarView({ monthDate, datedEvents, onMonthChange, onSelect }: CalendarViewProps) {
   const days = buildMonthGrid(monthDate);
 
   return (
@@ -63,9 +50,7 @@ export function CalendarView({
 
             return (
               <div
-                className={`calendar-day ${day.isCurrentMonth ? '' : 'muted'} ${
-                  day.isToday ? 'today' : ''
-                }`}
+                className={`calendar-day ${day.isCurrentMonth ? '' : 'muted'} ${day.isToday ? 'today' : ''}`}
                 key={key}
               >
                 <span className="day-number">{day.dayNumber}</span>
@@ -89,34 +74,6 @@ export function CalendarView({
           })}
         </div>
       </div>
-
-      <aside className="planning-panel" aria-label="Still planning events">
-        <div className="panel-heading">
-          <CalendarClock aria-hidden="true" size={19} />
-          <h2>Still planning</h2>
-        </div>
-        <p>Ideas and tentative plans stay out of the grid until they get a real date.</p>
-
-        <div className="planning-list">
-          {tentativeEvents.length ? (
-            tentativeEvents.map((event) => (
-              <button
-                type="button"
-                className={`planning-item category-${event.category}`}
-                onClick={() => onSelect(event)}
-                key={event.id}
-              >
-                <span>
-                  {getEventEmoji(event)} {event.title}
-                </span>
-                <small>{getEventDateLabel(event)}</small>
-              </button>
-            ))
-          ) : (
-            <div className="empty-state compact-empty">No tentative events match.</div>
-          )}
-        </div>
-      </aside>
     </section>
   );
 }
