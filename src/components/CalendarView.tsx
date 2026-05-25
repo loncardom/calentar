@@ -1,18 +1,24 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { SummerEvent } from '../types/Event';
-import { addMonths, buildMonthGrid, eventsOnDay, formatMonthYear } from '../utils/dates';
+import {
+  addMonths,
+  buildMonthGrid,
+  eventsOnDay,
+  formatMonthYear,
+  hasExactDate,
+} from '../utils/dates';
 import { getEventEmoji } from '../utils/presentation';
 
 interface CalendarViewProps {
   monthDate: Date;
-  datedEvents: SummerEvent[];
+  calendarEvents: SummerEvent[];
   onMonthChange: (date: Date) => void;
   onSelect: (event: SummerEvent) => void;
 }
 
 const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export function CalendarView({ monthDate, datedEvents, onMonthChange, onSelect }: CalendarViewProps) {
+export function CalendarView({ monthDate, calendarEvents, onMonthChange, onSelect }: CalendarViewProps) {
   const days = buildMonthGrid(monthDate);
 
   return (
@@ -27,7 +33,10 @@ export function CalendarView({ monthDate, datedEvents, onMonthChange, onSelect }
           >
             <ChevronLeft aria-hidden="true" size={22} />
           </button>
-          <h2>{formatMonthYear(monthDate)}</h2>
+          <div className="calendar-heading">
+            <h2>{formatMonthYear(monthDate)}</h2>
+            <p>Dashed plans are tentative windows</p>
+          </div>
           <button
             type="button"
             className="icon-button"
@@ -45,7 +54,7 @@ export function CalendarView({ monthDate, datedEvents, onMonthChange, onSelect }
             </div>
           ))}
           {days.map((day) => {
-            const dayEvents = eventsOnDay(datedEvents, day.date);
+            const dayEvents = eventsOnDay(calendarEvents, day.date);
             const key = `${day.date.getFullYear()}-${day.date.getMonth()}-${day.date.getDate()}`;
 
             return (
@@ -58,7 +67,9 @@ export function CalendarView({ monthDate, datedEvents, onMonthChange, onSelect }
                   {dayEvents.map((event) => (
                     <button
                       type="button"
-                      className={`calendar-event category-${event.category}`}
+                      className={`calendar-event category-${event.category} ${
+                        hasExactDate(event) ? '' : 'tentative'
+                      }`}
                       onClick={() => onSelect(event)}
                       key={event.id}
                     >

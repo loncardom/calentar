@@ -20,10 +20,11 @@ Each event supports:
 - `status`: `confirmed`, `planning`, `idea`, or `cancelled`
 - `category`: `movie`, `show`, `trip`, `outdoor`, `food`, or `other`
 - `date`: ISO date like `2026-07-04`, or `null` for tentative plans
+- `calendarStartDate` and `calendarEndDate`: optional ISO dates for showing a tentative planning window in the calendar
 - `dateLabel`: friendly vague or range text like `late July` or `July 17-19`
 - location, address, attendees, organizer, driver notes, cost, links, tags, notes, and `imagePrompt`
 
-If an event has a real `date`, it appears in the dated list and calendar. If `date` is `null`, it appears in the “Still planning” section and calendar side panel.
+If an event has a real `date`, it appears in the dated list and calendar. If `date` is `null`, it stays in the “Still planning” section; add calendar start and end dates when it should also appear as a tentative range in the calendar.
 
 ## Build
 

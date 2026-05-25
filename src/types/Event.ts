@@ -14,6 +14,8 @@ export interface SummerEvent {
   status: EventStatus;
   category: EventCategory;
   date: string | null;
+  calendarStartDate?: string | null;
+  calendarEndDate?: string | null;
   startTime: string | null;
   endTime: string | null;
   dateLabel: string | null;

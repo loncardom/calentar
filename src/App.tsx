@@ -85,7 +85,7 @@ function App() {
 
           <CalendarView
             monthDate={monthDate}
-            datedEvents={datedEvents}
+            calendarEvents={filteredEvents}
             onMonthChange={setMonthDate}
             onSelect={setSelectedEvent}
           />

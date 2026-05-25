@@ -680,6 +680,17 @@ main {
   letter-spacing: 0;
 }
 
+.calendar-heading {
+  text-align: center;
+}
+
+.calendar-heading p {
+  margin: 2px 0 0;
+  color: var(--soft);
+  font-size: 0.67rem;
+  font-weight: 700;
+}
+
 .icon-button {
   width: 28px;
   height: 28px;
@@ -761,6 +772,10 @@ main {
   background: var(--tag-bg);
   color: var(--accent);
   text-align: left;
+}
+
+.calendar-event.tentative {
+  border: 1px dashed var(--accent);
 }
 
 .calendar-event span,

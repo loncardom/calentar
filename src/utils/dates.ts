@@ -27,6 +27,25 @@ export const parseEventDate = (value: string | null): Date | null => {
 export const hasExactDate = (event: SummerEvent): boolean =>
   parseEventDate(event.date) !== null;
 
+export const getCalendarRange = (
+  event: SummerEvent,
+): { startDate: Date; endDate: Date } | null => {
+  const exactDate = parseEventDate(event.date);
+  if (exactDate) {
+    return { startDate: exactDate, endDate: exactDate };
+  }
+
+  const startDate = parseEventDate(event.calendarStartDate ?? null);
+  if (!startDate) return null;
+
+  const endDate = parseEventDate(event.calendarEndDate ?? null) ?? startDate;
+  if (endDate.getTime() < startDate.getTime()) {
+    return { startDate, endDate: startDate };
+  }
+
+  return { startDate, endDate };
+};
+
 export const sortEventsChronologically = (events: SummerEvent[]): SummerEvent[] =>
   [...events].sort((a, b) => {
     const dateA = parseEventDate(a.date)?.getTime() ?? Number.MAX_SAFE_INTEGER;
@@ -122,7 +141,11 @@ export const buildMonthGrid = (monthDate: Date): CalendarDay[] => {
 };
 
 export const eventsOnDay = (events: SummerEvent[], date: Date): SummerEvent[] =>
-  events.filter((event) => {
-    const eventDate = parseEventDate(event.date);
-    return eventDate ? isSameDay(eventDate, date) : false;
-  });
+  events
+    .filter((event) => {
+      const range = getCalendarRange(event);
+      if (!range) return false;
+
+      return date >= range.startDate && date <= range.endDate;
+    })
+    .sort((a, b) => Number(hasExactDate(b)) - Number(hasExactDate(a)));
