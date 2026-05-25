@@ -139,13 +139,3 @@ export const buildMonthGrid = (monthDate: Date): CalendarDay[] => {
     };
   });
 };
-
-export const eventsOnDay = (events: SummerEvent[], date: Date): SummerEvent[] =>
-  events
-    .filter((event) => {
-      const range = getCalendarRange(event);
-      if (!range) return false;
-
-      return date >= range.startDate && date <= range.endDate;
-    })
-    .sort((a, b) => Number(hasExactDate(b)) - Number(hasExactDate(a)));
