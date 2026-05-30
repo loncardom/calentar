@@ -3,6 +3,12 @@
     "id": "shwarnado-mississauga",
     "name": "Shwarnado",
     "city": "Mississauga, ON",
-    "mapsUrl": "https://maps.app.goo.gl/t8LtMQ88MurLAGzx6"
+    "mapsUrl": ""
+  },
+  {
+    "id": "chamsine-mississauga",
+    "name": "Chamsine",
+    "city": "Mississauga, ON",
+    "mapsUrl": ""
   }
 ]
