@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react';
 import eventsData from './data/events.json';
+import restaurantsData from './data/restaurants.json';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
 import { EventModal } from './components/EventModal';
 import { Filters, type FilterState } from './components/Filters';
 import type { SummerEvent } from './types/Event';
+import type { Restaurant } from './types/Restaurant';
 import {
   hasExactDate,
   parseEventDate,
@@ -13,6 +15,7 @@ import {
 } from './utils/dates';
 
 const events = eventsData as SummerEvent[];
+const restaurants = restaurantsData as Restaurant[];
 
 const defaultFilters: FilterState = {
   attendee: 'all',
@@ -111,6 +114,32 @@ function App() {
                 No tentative events match these filters. The planning board is clear.
               </div>
             )}
+          </section>
+
+          <section className="event-section">
+            <div className="section-heading">
+              <h2>Restaurants</h2>
+              <span>{restaurants.length}</span>
+            </div>
+            <div className="event-grid tentative-grid">
+              {restaurants.map((restaurant) => (
+                <a
+                  className="tentative-card category-food"
+                  href={restaurant.mapsUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  key={restaurant.id}
+                >
+                  <div className="tentative-icon" aria-hidden="true">
+                    🍽️
+                  </div>
+                  <div>
+                    <h3>{restaurant.name}</h3>
+                    <p>{restaurant.city} · Open in Maps</p>
+                  </div>
+                </a>
+              ))}
+            </div>
           </section>
         </div>
       </main>
