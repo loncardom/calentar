@@ -21,6 +21,15 @@ const defaultFilters: FilterState = {
   attendee: 'all',
 };
 
+const getRestaurantUrl = (restaurant: Restaurant) => {
+  if (restaurant.mapsUrl) {
+    return restaurant.mapsUrl;
+  }
+
+  const query = encodeURIComponent(`${restaurant.name} ${restaurant.city}`);
+  return `https://www.google.com/maps/search/${query}`;
+};
+
 function App() {
   const firstDatedEvent = sortEventsChronologically(events).find((event) =>
     hasExactDate(event),
@@ -125,7 +134,7 @@ function App() {
               {restaurants.map((restaurant) => (
                 <a
                   className="tentative-card category-food"
-                  href={restaurant.mapsUrl}
+                  href={getRestaurantUrl(restaurant)}
                   target="_blank"
                   rel="noreferrer"
                   key={restaurant.id}
