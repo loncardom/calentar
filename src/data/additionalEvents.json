@@ -1,0 +1,30 @@
+[
+  {
+    "id": "secret-city-lost-and-found",
+    "title": "Lost & Found: An Open World Puzzle Adventure",
+    "status": "planning",
+    "category": "other",
+    "date": null,
+    "calendarStartDate": "2026-06-01",
+    "calendarEndDate": "2026-11-30",
+    "startTime": "11:00",
+    "endTime": "16:00",
+    "dateLabel": "date TBD; Saturdays and Sundays, June-November 2026",
+    "locationName": "The Village at Black Creek",
+    "address": "1000 Murray Ross Pkwy",
+    "city": "Toronto, ON",
+    "description": "An immersive open-world puzzle adventure by Secret City Adventures, where teams explore The Village at Black Creek, meet characters, solve quests, and search for hidden treasure.",
+    "attendees": [],
+    "organizer": null,
+    "driver": null,
+    "transportationNotes": "Onsite parking is listed at $9.30 plus HST per car per day. The closest TTC subway stop is Pioneer Village, about an 11-minute walk away.",
+    "costLabel": "$42.25 weekday / $50.50 peak; optional VIP upgrade $65",
+    "costAmount": 50.5,
+    "currency": "CAD",
+    "ticketUrl": "https://www.secretcityadventures.com/lost-and-found",
+    "eventUrl": "https://www.secretcityadventures.com/lost-and-found",
+    "image": null,
+    "imagePrompt": "An immersive open-world puzzle adventure at a historic 1800s village, with friends exploring heritage buildings, meeting characters, solving clues, and searching for hidden treasure.",
+    "notes": "Runs June-November 2026 on Saturdays and Sundays from 11 AM to 4 PM. Recommended team size is 2-4 players. Listed play time is 2-4 hours. Pick a specific weekend date later."
+  }
+]
