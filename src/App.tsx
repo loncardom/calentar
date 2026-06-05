@@ -78,6 +78,10 @@ function App() {
     () => activeEvents.filter((event) => !hasExactDate(event)),
     [activeEvents],
   );
+  const calendarEvents = useMemo(
+    () => sortEventsChronologically(filteredEvents),
+    [filteredEvents],
+  );
 
   return (
     <div className="app-shell">
@@ -111,7 +115,7 @@ function App() {
 
           <CalendarView
             monthDate={monthDate}
-            calendarEvents={activeEvents}
+            calendarEvents={calendarEvents}
             onMonthChange={setMonthDate}
             onSelect={setSelectedEvent}
           />
