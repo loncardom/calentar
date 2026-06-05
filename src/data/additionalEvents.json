@@ -5,11 +5,11 @@
     "status": "planning",
     "category": "other",
     "date": null,
-    "calendarStartDate": "2026-06-01",
-    "calendarEndDate": "2026-11-30",
+    "calendarStartDate": "2026-08-10",
+    "calendarEndDate": "2026-08-16",
     "startTime": "11:00",
     "endTime": "16:00",
-    "dateLabel": "date TBD; Saturdays and Sundays, June-November 2026",
+    "dateLabel": "placeholder week: Aug 10-16; actually open Saturdays and Sundays, June-November 2026",
     "locationName": "The Village at Black Creek",
     "address": "1000 Murray Ross Pkwy",
     "city": "Toronto, ON",
@@ -25,6 +25,6 @@
     "eventUrl": "https://www.secretcityadventures.com/lost-and-found",
     "image": null,
     "imagePrompt": "An immersive open-world puzzle adventure at a historic 1800s village, with friends exploring heritage buildings, meeting characters, solving clues, and searching for hidden treasure.",
-    "notes": "Runs June-November 2026 on Saturdays and Sundays from 11 AM to 4 PM. Recommended team size is 2-4 players. Listed play time is 2-4 hours. Pick a specific weekend date later."
+    "notes": "Placeholder calendar week is Aug 10-16, 2026. Actual operating window is June-November 2026 on Saturdays and Sundays from 11 AM to 4 PM. Recommended team size is 2-4 players. Listed play time is 2-4 hours. Pick a specific weekend date later."
   }
 ]
