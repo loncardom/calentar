@@ -46,6 +46,16 @@ export const getCalendarRange = (
   return { startDate, endDate };
 };
 
+export const startOfDay = (date: Date): Date =>
+  new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+export const isPastEvent = (event: SummerEvent, referenceDate = new Date()): boolean => {
+  const range = getCalendarRange(event);
+  if (!range) return false;
+
+  return range.endDate.getTime() < startOfDay(referenceDate).getTime();
+};
+
 export const sortEventsChronologically = (events: SummerEvent[]): SummerEvent[] =>
   [...events].sort((a, b) => {
     const dateA = parseEventDate(a.date)?.getTime() ?? Number.MAX_SAFE_INTEGER;
