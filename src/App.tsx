@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import eventsData from './data/events.json';
+import eventOverridesData from './data/eventOverrides.json';
 import restaurantsData from './data/restaurants.json';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
@@ -15,7 +16,11 @@ import {
   startOfMonth,
 } from './utils/dates';
 
-const events = eventsData as SummerEvent[];
+const eventOverrides = eventOverridesData as Record<string, Partial<SummerEvent>>;
+const events = (eventsData as SummerEvent[]).map((event) => ({
+  ...event,
+  ...(eventOverrides[event.id] ?? {}),
+}));
 const restaurants = restaurantsData as Restaurant[];
 
 const defaultFilters: FilterState = {
@@ -62,7 +67,7 @@ function App() {
     [filteredEvents],
   );
   const pastEvents = useMemo(
-    () => sortEventsChronologically(filteredEvents.filter(isPastEvent)).reverse(),
+    () => sortEventsChronologically(filteredEvents.filter((event) => isPastEvent(event))).reverse(),
     [filteredEvents],
   );
   const datedEvents = useMemo(
