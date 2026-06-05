@@ -30,6 +30,9 @@ interface CalendarSegment {
 
 type UnplacedSegment = Omit<CalendarSegment, 'lane' | 'showLabel'>;
 
+const compareEventStartTime = (a: SummerEvent, b: SummerEvent): number =>
+  (a.startTime ?? '').localeCompare(b.startTime ?? '');
+
 function buildWeekSegment(event: SummerEvent, week: CalendarDay[]): UnplacedSegment | null {
   const range = getCalendarRange(event);
   const weekStart = week[0]?.date;
@@ -64,6 +67,7 @@ function buildWeekSegments(
       .sort(
         (a, b) =>
           a.startColumn - b.startColumn ||
+          compareEventStartTime(a.event, b.event) ||
           b.span - a.span ||
           Number(hasExactDate(b.event)) - Number(hasExactDate(a.event)),
       );
