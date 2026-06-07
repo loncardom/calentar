@@ -1,0 +1,28 @@
+[
+  {
+    "id": "fall-farm-wagon-ride",
+    "title": "Fall Farm Wagon Ride",
+    "status": "planning",
+    "category": "outdoor",
+    "date": "2026-10-17",
+    "startTime": "20:00",
+    "endTime": "22:30",
+    "dateLabel": null,
+    "locationName": "Snyder's Family Farm",
+    "address": "936685 Blenheim Road",
+    "city": "Bright, ON",
+    "description": "Seasonal farm trip west of Mississauga, with a wagon ride and farm attractions.",
+    "attendees": ["Andy", "Dom"],
+    "organizer": null,
+    "driver": null,
+    "transportationNotes": "About 1.5 hours west of Mississauga depending on traffic. Confirm the final time slot before booking.",
+    "costLabel": "Price TBD; plan around $50-$60 plus tax per person until tickets are posted",
+    "costAmount": 55,
+    "currency": "CAD",
+    "ticketUrl": null,
+    "eventUrl": null,
+    "image": null,
+    "imagePrompt": null,
+    "notes": "Picked Saturday, October 17, 2026 from 8 PM to 10:30 PM as a placeholder. Current season pricing was not reliably visible through search, so this uses a planning estimate and flags the price as TBD. Confirm operating dates, time slots, and ticket price once the season is posted."
+  }
+]
