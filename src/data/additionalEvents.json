@@ -26,5 +26,31 @@
     "image": null,
     "imagePrompt": "An immersive open-world puzzle adventure at a historic 1800s village, with friends exploring heritage buildings, meeting characters, solving clues, and searching for hidden treasure.",
     "notes": "Placeholder calendar week is Aug 10-16, 2026. Actual operating window is June-November 2026 on Saturdays and Sundays from 11 AM to 4 PM. Recommended team size is 2-4 players. Listed play time is 2-4 hours. Pick a specific weekend date later."
+  },
+  {
+    "id": "humber-river-kayaking",
+    "title": "Humber River Kayaking",
+    "status": "planning",
+    "category": "outdoor",
+    "date": "2026-06-20",
+    "startTime": "13:00",
+    "endTime": "15:00",
+    "dateLabel": null,
+    "locationName": "Toronto Adventures Humber River Paddling Center",
+    "address": "9 Catherine St",
+    "city": "Toronto, ON",
+    "description": "Rent kayaks and paddle the Humber River from the Toronto Adventures launch near Old Mill.",
+    "attendees": ["Andy", "Dom"],
+    "organizer": null,
+    "driver": null,
+    "transportationNotes": "Located in King's Mill Park near Old Mill. Arrive at least 15 minutes early for check-in and orientation. Bring government photo ID, water, sunscreen, and shoes that can get wet.",
+    "costLabel": "Weekend 2-hour single kayak $49.95 plus tax per person; tandem kayak $89.95 plus tax for two",
+    "costAmount": 49.95,
+    "currency": "CAD",
+    "ticketUrl": "https://torontoadventures.ca/all-adventures/kayak-canoe-sup-rentals/",
+    "eventUrl": "https://torontoadventures.ca/all-adventures/kayak-canoe-sup-rentals/",
+    "image": null,
+    "imagePrompt": "A relaxed summer kayaking trip on Toronto's Humber River, with two friends paddling through calm green water near Old Mill and city nature in the background.",
+    "notes": "Picked Saturday, June 20, 2026 from 1 PM to 3 PM as a near-term weekend placeholder. Toronto Adventures lists 2-hour rentals May-October 2026. Included gear: boat, paddle, PFD/life jacket, Coast Guard safety kit, and a brief orientation. Paddlers must be comfortable treading water with a PFD and reaching shore. Late return fee is $20 per 15 minutes per boat. Confirm weather and availability before booking."
   }
 ]
