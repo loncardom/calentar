@@ -87,15 +87,15 @@
     "status": "planning",
     "category": "movie",
     "date": null,
-    "calendarStartDate": "2026-07-17",
-    "calendarEndDate": "2026-07-23",
+    "calendarStartDate": "2026-07-23",
+    "calendarEndDate": "2026-07-24",
     "startTime": null,
     "endTime": null,
-    "dateLabel": "first week of release, July 17-23",
+    "dateLabel": "July 23 and 24",
     "locationName": "Cineplex IMAX",
     "address": null,
     "city": "Toronto / Mississauga, ON",
-    "description": "Watch Christopher Nolan's The Odyssey in IMAX during the first week of release.",
+    "description": "Watch Christopher Nolan's The Odyssey in IMAX on either July 23 or July 24.",
     "attendees": ["Brett", "Andy", "Riley", "Dom"],
     "organizer": null,
     "driver": null,
@@ -107,7 +107,7 @@
     "eventUrl": "https://www.cineplex.com/movie/the-odyssey",
     "image": null,
     "imagePrompt": "A mythic cinematic IMAX movie night poster with ancient Greek seas, a giant screen, dramatic light, and friends heading into a theatre.",
-    "notes": "Cineplex lists the release date as July 17, 2026. Exact IMAX prices were not visible without selecting a showtime and seats, so use $25-$30 per person as a planning estimate and confirm before booking."
+    "notes": "Planning window is July 23 and July 24, 2026. Exact IMAX prices were not visible without selecting a showtime and seats, so use $25-$30 per person as a planning estimate and confirm before booking."
   },
   {
     "id": "penn-teller-show",
