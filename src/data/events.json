@@ -218,7 +218,7 @@
     "title": "Tubing in Elora + Elora Quarry Swim",
     "status": "planning",
     "category": "outdoor",
-    "date": "2026-07-12",
+    "date": "2026-07-26",
     "startTime": "10:00",
     "endTime": null,
     "dateLabel": null,
@@ -237,7 +237,7 @@
     "eventUrl": "https://www.grandriver.ca/outdoor-recreation/conservation-areas/elora-quarry/",
     "image": null,
     "imagePrompt": "A summer day at Elora Gorge with river tubing, limestone cliffs, clear water, and a relaxed group adventure feel.",
-    "notes": "Plan tubing at 10:00 AM on Sunday, July 12, 2026. Tubing requires online tickets in advance; day-use admission is separate. Elora Quarry swimming is separate from Elora Gorge: tickets and parking permits must be purchased online in advance, tickets are for either 10 AM-2 PM or 3 PM-7 PM sessions, and Gorge/Quarry admissions are not interchangeable. Estimated solo all-in cost with rental tubing plus Quarry swim and parking is $95.50; parking can be shared by car."
+    "notes": "Plan tubing at 10:00 AM on Sunday, July 26, 2026. Tubing requires online tickets in advance; day-use admission is separate. Elora Quarry swimming is separate from Elora Gorge: tickets and parking permits must be purchased online in advance, tickets are for either 10 AM-2 PM or 3 PM-7 PM sessions, and Gorge/Quarry admissions are not interchangeable. Estimated solo all-in cost with rental tubing plus Quarry swim and parking is $95.50; parking can be shared by car."
   },
   {
     "id": "skydiving-idea",
@@ -264,7 +264,7 @@
     "ticketUrl": "https://skydivetoronto.com/",
     "eventUrl": "https://skydivetoronto.com/",
     "image": null,
-    "imagePrompt": "A bold skydiving themed summer image with a bright blue sky, parachutes, clouds, and a playful adventure poster feel.",
+    "imagePrompt": "A bold skydiving themed summer image with a bright blue sky, parachutes, and a playful adventure poster feel.",
     "notes": "Check deposit rules and whether video packages are worth it."
   },
   {
