@@ -324,10 +324,10 @@
     "title": "Target Sports Canada Session",
     "status": "planning",
     "category": "other",
-    "date": null,
+    "date": "2026-07-03",
     "startTime": null,
     "endTime": null,
-    "dateLabel": "date TBD",
+    "dateLabel": null,
     "locationName": "Target Sports YYZ",
     "address": "14 Stalwart Industrial Drive",
     "city": "Gormley, ON",
@@ -343,7 +343,7 @@
     "eventUrl": "https://targetsportsyyz.com/",
     "image": null,
     "imagePrompt": "A clean modern indoor activity experience with friends, safety gear, lane lighting, and a controlled supervised environment.",
-    "notes": "Review venue requirements and booking details before going."
+    "notes": "Scheduled for Friday, July 3, 2026. Review venue requirements and booking details before going."
   },
   {
     "id": "sosa-gliding-intro-flight",
