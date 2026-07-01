@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Calendar 32">
-  <rect x="8" y="7" width="48" height="52" rx="10" fill="#fffdf8" stroke="#252521" stroke-width="4"/>
-  <path d="M8 21h48v13H8z" fill="#534ab7"/>
-  <rect x="18" y="3" width="6" height="13" rx="3" fill="#252521"/>
-  <rect x="40" y="3" width="6" height="13" rx="3" fill="#252521"/>
-  <text x="32" y="53" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="27" font-weight="800" fill="#252521">32</text>
+  <rect x="6" y="5" width="52" height="54" rx="10" fill="#fffdf8" stroke="#252521" stroke-width="3"/>
+  <path d="M6 18h52v10H6z" fill="#534ab7"/>
+  <rect x="17" y="2" width="6" height="13" rx="3" fill="#252521"/>
+  <rect x="41" y="2" width="6" height="13" rx="3" fill="#252521"/>
+  <text x="32" y="54" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="36" font-weight="900" letter-spacing="-2" fill="#252521">32</text>
 </svg>
