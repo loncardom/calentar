@@ -142,7 +142,7 @@ function App() {
                 <span className="toggle-marker" aria-hidden="true">
                   {isPastExpanded ? '−' : '+'}
                 </span>
-                <h2>Past events</h2>
+                <span className="section-toggle-label">Past events</span>
               </button>
               <span>{pastEvents.length}</span>
             </div>
