@@ -6,6 +6,7 @@ import eventOverridesData from './data/eventOverrides.json';
 import restaurantsData from './data/restaurants.json';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
+import { EventMapView } from './components/EventMapView';
 import { EventModal } from './components/EventModal';
 import { lastUpdatedAt } from './generated/buildInfo';
 import type { SummerEvent } from './types/Event';
@@ -61,6 +62,7 @@ function App() {
     hasExactDate(event) && !isPastEvent(event),
   );
   const initialMonth = startOfMonth(parseEventDate(firstDatedEvent?.date ?? null) ?? new Date());
+  const isMapRoute = window.location.pathname.replace(/\/+$/, '') === '/map';
 
   const [selectedEvent, setSelectedEvent] = useState<SummerEvent | null>(null);
   const [monthDate, setMonthDate] = useState<Date>(initialMonth);
@@ -83,102 +85,110 @@ function App() {
 
   return (
     <div className="app-shell">
-      <main>
-        <div className="tiles-view">
-          <CalendarView
-            monthDate={monthDate}
-            calendarEvents={calendarEvents}
-            onMonthChange={setMonthDate}
-            onSelect={setSelectedEvent}
-          />
-
-          <section className="event-section">
-            <div className="section-heading">
-              <h2>Dated plans</h2>
-              <span>{datedEvents.length}</span>
+      {isMapRoute ? (
+        <EventMapView events={calendarEvents} onSelect={setSelectedEvent} />
+      ) : (
+        <main>
+          <div className="tiles-view">
+            <div className="view-link-row">
+              <a href="/map" className="map-view-link">Open map view</a>
             </div>
-            {datedEvents.length ? (
-              <div className="event-grid">
-                {datedEvents.map((event) => (
-                  <EventCard event={event} onSelect={setSelectedEvent} key={event.id} />
-                ))}
+
+            <CalendarView
+              monthDate={monthDate}
+              calendarEvents={calendarEvents}
+              onMonthChange={setMonthDate}
+              onSelect={setSelectedEvent}
+            />
+
+            <section className="event-section">
+              <div className="section-heading">
+                <h2>Dated plans</h2>
+                <span>{datedEvents.length}</span>
               </div>
-            ) : (
-              <div className="empty-state">No dated events yet. Add a date in the JSON.</div>
-            )}
-          </section>
+              {datedEvents.length ? (
+                <div className="event-grid">
+                  {datedEvents.map((event) => (
+                    <EventCard event={event} onSelect={setSelectedEvent} key={event.id} />
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state">No dated events yet. Add a date in the JSON.</div>
+              )}
+            </section>
 
-          <section className="event-section planning-section">
-            <div className="section-heading">
-              <h2>Still planning</h2>
-              <span>{tentativeEvents.length}</span>
-            </div>
-            {tentativeEvents.length ? (
-              <div className="event-grid tentative-grid">
-                {tentativeEvents.map((event) => (
-                  <EventCard event={event} onSelect={setSelectedEvent} key={event.id} compact />
-                ))}
+            <section className="event-section planning-section">
+              <div className="section-heading">
+                <h2>Still planning</h2>
+                <span>{tentativeEvents.length}</span>
               </div>
-            ) : (
-              <div className="empty-state">No tentative events. The planning board is clear.</div>
-            )}
-          </section>
-
-          <section className="event-section">
-            <div className="section-heading">
-              <h2>Restaurants</h2>
-              <span>{restaurants.length}</span>
-            </div>
-            <div className="event-grid tentative-grid">
-              {restaurants.map((restaurant) => (
-                <a
-                  className="tentative-card category-food"
-                  href={getRestaurantUrl(restaurant)}
-                  target="_blank"
-                  rel="noreferrer"
-                  key={restaurant.id}
-                >
-                  <div className="tentative-icon" aria-hidden="true">
-                    🍽️
-                  </div>
-                  <div>
-                    <h3>{restaurant.name}</h3>
-                    <p>{restaurant.city} · Open in Maps</p>
-                  </div>
-                </a>
-              ))}
-            </div>
-          </section>
-
-          <section className="event-section planning-section">
-            <div className="section-heading">
-              <button
-                type="button"
-                className="section-toggle"
-                aria-expanded={isPastExpanded}
-                onClick={() => setIsPastExpanded((expanded) => !expanded)}
-              >
-                <span className="toggle-marker" aria-hidden="true">
-                  {isPastExpanded ? '−' : '+'}
-                </span>
-                <span className="section-toggle-label">Past events</span>
-              </button>
-              <span>{pastEvents.length}</span>
-            </div>
-            {isPastExpanded ? (
-              pastEvents.length ? (
+              {tentativeEvents.length ? (
                 <div className="event-grid tentative-grid">
-                  {pastEvents.map((event) => (
+                  {tentativeEvents.map((event) => (
                     <EventCard event={event} onSelect={setSelectedEvent} key={event.id} compact />
                   ))}
                 </div>
               ) : (
-                <div className="empty-state">No past events.</div>
-              )
-            ) : null}
-          </section>
-        </div>
-      </main>
+                <div className="empty-state">No tentative events. The planning board is clear.</div>
+              )}
+            </section>
+
+            <section className="event-section">
+              <div className="section-heading">
+                <h2>Restaurants</h2>
+                <span>{restaurants.length}</span>
+              </div>
+              <div className="event-grid tentative-grid">
+                {restaurants.map((restaurant) => (
+                  <a
+                    className="tentative-card category-food"
+                    href={getRestaurantUrl(restaurant)}
+                    target="_blank"
+                    rel="noreferrer"
+                    key={restaurant.id}
+                  >
+                    <div className="tentative-icon" aria-hidden="true">
+                      🍽️
+                    </div>
+                    <div>
+                      <h3>{restaurant.name}</h3>
+                      <p>{restaurant.city} · Open in Maps</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </section>
+
+            <section className="event-section planning-section">
+              <div className="section-heading">
+                <button
+                  type="button"
+                  className="section-toggle"
+                  aria-expanded={isPastExpanded}
+                  onClick={() => setIsPastExpanded((expanded) => !expanded)}
+                >
+                  <span className="toggle-marker" aria-hidden="true">
+                    {isPastExpanded ? '−' : '+'}
+                  </span>
+                  <span className="section-toggle-label">Past events</span>
+                </button>
+                <span>{pastEvents.length}</span>
+              </div>
+              {isPastExpanded ? (
+                pastEvents.length ? (
+                  <div className="event-grid tentative-grid">
+                    {pastEvents.map((event) => (
+                      <EventCard event={event} onSelect={setSelectedEvent} key={event.id} compact />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="empty-state">No past events.</div>
+                )
+              ) : null}
+            </section>
+          </div>
+        </main>
+      )}
 
       {lastUpdatedLabel ? (
         <footer className="site-footer" title={`${lastUpdatedAt} · America/Toronto`}>
