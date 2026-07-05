@@ -98,13 +98,13 @@
 }
 
 .modal-banner {
+  text-align: left;
   justify-content: flex-start;
   align-items: center;
   gap: 6px;
   height: 52px;
   padding: 8px 50px 8px 10px;
-  font-size: 1.65rem;
-  text-align: left;
+  font-size: 2.25rem;
 }
 
 .site-footer {
@@ -253,16 +253,21 @@
   }
 
   .event-modal .modal-banner {
-    height: 62px;
-    gap: 6px;
-    padding: 18px 50px 8px 10px;
     cursor: grab;
     touch-action: none;
+    -webkit-user-select: none;
     user-select: none;
+    gap: 6px;
+    height: 75px;
+    padding: 8px 48px 8px 10px;
   }
 
   .event-modal.dragging .modal-banner {
     cursor: grabbing;
+  }
+
+  .modal-banner-title {
+    font-size: 1.14rem;
   }
 
   .sheet-drag-indicator {
