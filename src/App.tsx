@@ -7,6 +7,7 @@ import restaurantsData from './data/restaurants.json';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
 import { EventModal } from './components/EventModal';
+import { lastUpdatedAt } from './generated/buildInfo';
 import type { SummerEvent } from './types/Event';
 import type { Restaurant } from './types/Restaurant';
 import {
@@ -27,6 +28,19 @@ const events = ([
   ...(eventOverrides[event.id] ?? {}),
 }));
 const restaurants = restaurantsData as Restaurant[];
+
+const formatLastUpdatedDate = (value: string) => {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) return null;
+
+  return new Intl.DateTimeFormat('en-CA', {
+    dateStyle: 'medium',
+    timeZone: 'America/Toronto',
+  }).format(date);
+};
+
+const lastUpdatedLabel = formatLastUpdatedDate(lastUpdatedAt);
 
 const getRestaurantUrl = (restaurant: Restaurant) => {
   if (restaurant.mapsUrl) {
@@ -160,6 +174,12 @@ function App() {
           </section>
         </div>
       </main>
+
+      {lastUpdatedLabel ? (
+        <footer className="site-footer" title={lastUpdatedAt}>
+          Last updated {lastUpdatedLabel}
+        </footer>
+      ) : null}
 
       <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />
     </div>
