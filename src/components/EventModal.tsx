@@ -334,10 +334,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 <CalendarClock aria-hidden="true" size={13} />
                 Date & time
               </dt>
-              <dd>
-                {dateLabel}
-                {timeLabel !== 'TBD' ? <span>{timeLabel}</span> : null}
-              </dd>
+              <dd>{timeLabel !== 'TBD' ? `${dateLabel} · ${timeLabel}` : dateLabel}</dd>
             </div>
             <div>
               <dt>
