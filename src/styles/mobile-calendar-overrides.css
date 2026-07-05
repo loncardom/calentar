@@ -1,0 +1,6 @@
+@media (width <= 560px) {
+  .calendar-event {
+    min-height: 18px;
+    padding-inline: 2px;
+  }
+}
