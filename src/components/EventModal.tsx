@@ -166,8 +166,11 @@ export function EventModal({ event, onClose }: EventModalProps) {
     setDragOffset(0);
   };
 
-  const handleDragPointerDown = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
-    if (pointerEvent.button !== 0) return;
+  const shouldIgnoreDragTarget = (target: EventTarget | null) =>
+    target instanceof HTMLElement && target.closest('.modal-close');
+
+  const handleDragPointerDown = (pointerEvent: PointerEvent<HTMLDivElement>) => {
+    if (pointerEvent.button !== 0 || shouldIgnoreDragTarget(pointerEvent.target)) return;
 
     dragStartYRef.current = pointerEvent.clientY;
     dragPointerIdRef.current = pointerEvent.pointerId;
@@ -177,7 +180,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
     pointerEvent.preventDefault();
   };
 
-  const handleDragPointerMove = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+  const handleDragPointerMove = (pointerEvent: PointerEvent<HTMLDivElement>) => {
     if (
       dragPointerIdRef.current !== pointerEvent.pointerId ||
       dragStartYRef.current === null
@@ -193,7 +196,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
     }
   };
 
-  const handleDragPointerUp = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+  const handleDragPointerUp = (pointerEvent: PointerEvent<HTMLDivElement>) => {
     if (
       dragPointerIdRef.current !== pointerEvent.pointerId ||
       dragStartYRef.current === null
@@ -219,7 +222,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
     setDragOffset(0);
   };
 
-  const handleDragPointerCancel = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+  const handleDragPointerCancel = (pointerEvent: PointerEvent<HTMLDivElement>) => {
     if (pointerEvent.currentTarget.hasPointerCapture(pointerEvent.pointerId)) {
       pointerEvent.currentTarget.releasePointerCapture(pointerEvent.pointerId);
     }
@@ -243,20 +246,17 @@ export function EventModal({ event, onClose }: EventModalProps) {
         ref={panelRef}
         style={modalStyle}
       >
-        <button
-          type="button"
-          className="sheet-drag-handle"
-          aria-label="Drag down to dismiss details"
+        <div
+          className="modal-banner"
           onPointerDown={handleDragPointerDown}
           onPointerMove={handleDragPointerMove}
           onPointerUp={handleDragPointerUp}
           onPointerCancel={handleDragPointerCancel}
         >
-          <span aria-hidden="true" />
-        </button>
-
-        <div className="modal-banner" aria-hidden="true">
-          {getEventEmoji(renderedEvent)}
+          <span className="sheet-drag-indicator" aria-hidden="true" />
+          <span className="modal-banner-emoji" aria-hidden="true">
+            {getEventEmoji(renderedEvent)}
+          </span>
           <button
             type="button"
             className="modal-close"
