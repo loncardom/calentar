@@ -89,10 +89,11 @@
 
 .modal-banner {
   justify-content: flex-start;
-  gap: 10px;
-  min-height: 92px;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 78px;
   height: auto;
-  padding: 18px 52px 16px 20px;
+  padding: 18px 52px 14px 18px;
   text-align: left;
 }
 
@@ -107,16 +108,15 @@
   position: relative;
   z-index: 1;
   flex: 1;
+  min-width: 0;
   margin: 0;
   color: var(--accent);
-  font-size: 1.08rem;
+  font-size: 0.92rem;
   font-weight: 820;
-  line-height: 1.16;
-  overflow: hidden;
+  line-height: 1.18;
+  overflow: visible;
+  overflow-wrap: anywhere;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.38);
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
 }
 
 .site-footer {
@@ -264,8 +264,8 @@
   }
 
   .event-modal .modal-banner {
-    min-height: 76px;
-    gap: 8px;
+    min-height: 68px;
+    gap: 7px;
     padding: 22px 50px 12px 16px;
     cursor: grab;
     touch-action: none;
@@ -277,7 +277,7 @@
   }
 
   .modal-banner-title {
-    font-size: 0.98rem;
+    font-size: 0.84rem;
   }
 
   .sheet-drag-indicator {
