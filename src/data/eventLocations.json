@@ -1,0 +1,62 @@
+{
+  "penn-teller-show": {
+    "lat": 43.0857,
+    "lng": -79.0818
+  },
+  "bread-and-honey-festival": {
+    "lat": 43.5836,
+    "lng": -79.7182
+  },
+  "trash-dash-toronto-island": {
+    "lat": 43.6221,
+    "lng": -79.3788
+  },
+  "bbq-humber-bay": {
+    "lat": 43.6306,
+    "lng": -79.4748
+  },
+  "beach-day": {
+    "lat": 43.6848,
+    "lng": -80.4305
+  },
+  "taste-of-manila-2026": {
+    "lat": 43.7317,
+    "lng": -79.4347
+  },
+  "skydiving-idea": {
+    "lat": 44.1879,
+    "lng": -79.7021
+  },
+  "toronto-ukrainian-festival-2026": {
+    "lat": 43.6505,
+    "lng": -79.4817
+  },
+  "jury-experience-toronto": {
+    "lat": 43.6556,
+    "lng": -79.4142
+  },
+  "beehive-beard": {
+    "lat": 43.4427,
+    "lng": -79.9054
+  },
+  "target-sports-session": {
+    "lat": 43.9551,
+    "lng": -79.3822
+  },
+  "sosa-gliding-intro-flight": {
+    "lat": 43.3008,
+    "lng": -80.0702
+  },
+  "secret-city-lost-and-found": {
+    "lat": 43.7741,
+    "lng": -79.5163
+  },
+  "humber-river-kayaking": {
+    "lat": 43.6494,
+    "lng": -79.4939
+  },
+  "fall-farm-wagon-ride": {
+    "lat": 43.3348,
+    "lng": -80.6084
+  }
+}
