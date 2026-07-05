@@ -9,7 +9,7 @@ import {
   UserRound,
   X,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
 import type { SummerEvent } from '../types/Event';
 import { formatLongDate, formatTimeRange, parseEventDate } from '../utils/dates';
 import { getGoogleMapsUrl } from '../utils/maps';
@@ -26,14 +26,19 @@ interface EventModalProps {
 }
 
 const closeAnimationMs = 220;
+const dragDismissThreshold = 80;
 
 export function EventModal({ event, onClose }: EventModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const onCloseRef = useRef(onClose);
   const modalHistoryEntryRef = useRef<string | null>(null);
+  const dragStartYRef = useRef<number | null>(null);
+  const dragPointerIdRef = useRef<number | null>(null);
   const [renderedEvent, setRenderedEvent] = useState<SummerEvent | null>(event);
   const [isClosing, setIsClosing] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
 
   useEffect(() => {
     onCloseRef.current = onClose;
@@ -43,6 +48,10 @@ export function EventModal({ event, onClose }: EventModalProps) {
     if (event) {
       setRenderedEvent(event);
       setIsClosing(false);
+      setIsDragging(false);
+      setDragOffset(0);
+      dragStartYRef.current = null;
+      dragPointerIdRef.current = null;
       return undefined;
     }
 
@@ -52,6 +61,10 @@ export function EventModal({ event, onClose }: EventModalProps) {
     const timeout = window.setTimeout(() => {
       setRenderedEvent(null);
       setIsClosing(false);
+      setIsDragging(false);
+      setDragOffset(0);
+      dragStartYRef.current = null;
+      dragPointerIdRef.current = null;
     }, closeAnimationMs);
 
     return () => window.clearTimeout(timeout);
@@ -144,6 +157,75 @@ export function EventModal({ event, onClose }: EventModalProps) {
   const primaryLink = renderedEvent.ticketUrl || renderedEvent.eventUrl;
   const exactDate = parseEventDate(renderedEvent.date);
   const timeLabel = formatTimeRange(renderedEvent.startTime, renderedEvent.endTime) || 'TBD';
+  const modalStyle = { '--sheet-drag-y': `${dragOffset}px` } as CSSProperties;
+
+  const resetDrag = () => {
+    dragStartYRef.current = null;
+    dragPointerIdRef.current = null;
+    setIsDragging(false);
+    setDragOffset(0);
+  };
+
+  const handleDragPointerDown = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+    if (pointerEvent.button !== 0) return;
+
+    dragStartYRef.current = pointerEvent.clientY;
+    dragPointerIdRef.current = pointerEvent.pointerId;
+    setIsDragging(true);
+    setDragOffset(0);
+    pointerEvent.currentTarget.setPointerCapture(pointerEvent.pointerId);
+    pointerEvent.preventDefault();
+  };
+
+  const handleDragPointerMove = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+    if (
+      dragPointerIdRef.current !== pointerEvent.pointerId ||
+      dragStartYRef.current === null
+    ) {
+      return;
+    }
+
+    const nextOffset = Math.max(0, pointerEvent.clientY - dragStartYRef.current);
+    setDragOffset(nextOffset);
+
+    if (nextOffset > 0) {
+      pointerEvent.preventDefault();
+    }
+  };
+
+  const handleDragPointerUp = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+    if (
+      dragPointerIdRef.current !== pointerEvent.pointerId ||
+      dragStartYRef.current === null
+    ) {
+      return;
+    }
+
+    const nextOffset = Math.max(0, pointerEvent.clientY - dragStartYRef.current);
+    dragStartYRef.current = null;
+    dragPointerIdRef.current = null;
+    setIsDragging(false);
+
+    if (pointerEvent.currentTarget.hasPointerCapture(pointerEvent.pointerId)) {
+      pointerEvent.currentTarget.releasePointerCapture(pointerEvent.pointerId);
+    }
+
+    if (nextOffset >= dragDismissThreshold) {
+      setDragOffset(nextOffset);
+      onClose();
+      return;
+    }
+
+    setDragOffset(0);
+  };
+
+  const handleDragPointerCancel = (pointerEvent: PointerEvent<HTMLButtonElement>) => {
+    if (pointerEvent.currentTarget.hasPointerCapture(pointerEvent.pointerId)) {
+      pointerEvent.currentTarget.releasePointerCapture(pointerEvent.pointerId);
+    }
+
+    resetDrag();
+  };
 
   return (
     <div
@@ -154,12 +236,25 @@ export function EventModal({ event, onClose }: EventModalProps) {
       }}
     >
       <section
-        className={`event-modal category-${renderedEvent.category} status-${renderedEvent.status}`}
+        className={`event-modal category-${renderedEvent.category} status-${renderedEvent.status} ${isDragging ? 'dragging' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="event-modal-title"
         ref={panelRef}
+        style={modalStyle}
       >
+        <button
+          type="button"
+          className="sheet-drag-handle"
+          aria-label="Drag down to dismiss details"
+          onPointerDown={handleDragPointerDown}
+          onPointerMove={handleDragPointerMove}
+          onPointerUp={handleDragPointerUp}
+          onPointerCancel={handleDragPointerCancel}
+        >
+          <span aria-hidden="true" />
+        </button>
+
         <div className="modal-banner" aria-hidden="true">
           {getEventEmoji(renderedEvent)}
           <button
