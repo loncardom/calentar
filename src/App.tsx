@@ -7,7 +7,6 @@ import restaurantsData from './data/restaurants.json';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
 import { EventModal } from './components/EventModal';
-import { Filters, type FilterState } from './components/Filters';
 import type { SummerEvent } from './types/Event';
 import type { Restaurant } from './types/Restaurant';
 import {
@@ -29,10 +28,6 @@ const events = ([
 }));
 const restaurants = restaurantsData as Restaurant[];
 
-const defaultFilters: FilterState = {
-  attendee: 'all',
-};
-
 const getRestaurantUrl = (restaurant: Restaurant) => {
   if (restaurant.mapsUrl) {
     return restaurant.mapsUrl;
@@ -48,33 +43,14 @@ function App() {
   );
   const initialMonth = startOfMonth(parseEventDate(firstDatedEvent?.date ?? null) ?? new Date());
 
-  const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedEvent, setSelectedEvent] = useState<SummerEvent | null>(null);
   const [monthDate, setMonthDate] = useState<Date>(initialMonth);
+  const [isPastExpanded, setIsPastExpanded] = useState(false);
 
-  const attendees = useMemo(
-    () => Array.from(new Set(events.flatMap((event) => event.attendees))).sort(),
-    [],
-  );
-
-  const filteredEvents = useMemo(
-    () =>
-      events.filter((event) => {
-        if (filters.attendee !== 'all' && !event.attendees.includes(filters.attendee)) {
-          return false;
-        }
-        return true;
-      }),
-    [filters],
-  );
-
-  const activeEvents = useMemo(
-    () => filteredEvents.filter((event) => !isPastEvent(event)),
-    [filteredEvents],
-  );
+  const activeEvents = useMemo(() => events.filter((event) => !isPastEvent(event)), []);
   const pastEvents = useMemo(
-    () => sortEventsChronologically(filteredEvents.filter((event) => isPastEvent(event))).reverse(),
-    [filteredEvents],
+    () => sortEventsChronologically(events.filter((event) => isPastEvent(event))).reverse(),
+    [],
   );
   const datedEvents = useMemo(
     () => sortEventsChronologically(activeEvents.filter(hasExactDate)),
@@ -84,23 +60,19 @@ function App() {
     () => activeEvents.filter((event) => !hasExactDate(event)),
     [activeEvents],
   );
-  const calendarEvents = useMemo(
-    () => sortEventsChronologically(filteredEvents),
-    [filteredEvents],
-  );
+  const calendarEvents = useMemo(() => sortEventsChronologically(events), []);
 
   return (
     <div className="app-shell">
       <main>
-        <section className="summary-strip" aria-label="Current selection summary">
-          <p>
-            Showing <strong>{filteredEvents.length}</strong> of <strong>{events.length}</strong>{' '}
-            plans.
-          </p>
-          <Filters filters={filters} attendees={attendees} onChange={setFilters} />
-        </section>
-
         <div className="tiles-view">
+          <CalendarView
+            monthDate={monthDate}
+            calendarEvents={calendarEvents}
+            onMonthChange={setMonthDate}
+            onSelect={setSelectedEvent}
+          />
+
           <section className="event-section">
             <div className="section-heading">
               <h2>Dated plans</h2>
@@ -113,18 +85,9 @@ function App() {
                 ))}
               </div>
             ) : (
-              <div className="empty-state">
-                No dated events match these filters. Clear a filter or add a date in the JSON.
-              </div>
+              <div className="empty-state">No dated events yet. Add a date in the JSON.</div>
             )}
           </section>
-
-          <CalendarView
-            monthDate={monthDate}
-            calendarEvents={calendarEvents}
-            onMonthChange={setMonthDate}
-            onSelect={setSelectedEvent}
-          />
 
           <section className="event-section planning-section">
             <div className="section-heading">
@@ -134,18 +97,11 @@ function App() {
             {tentativeEvents.length ? (
               <div className="event-grid tentative-grid">
                 {tentativeEvents.map((event) => (
-                  <EventCard
-                    event={event}
-                    onSelect={setSelectedEvent}
-                    key={event.id}
-                    compact
-                  />
+                  <EventCard event={event} onSelect={setSelectedEvent} key={event.id} compact />
                 ))}
               </div>
             ) : (
-              <div className="empty-state">
-                No tentative events match these filters. The planning board is clear.
-              </div>
+              <div className="empty-state">No tentative events. The planning board is clear.</div>
             )}
           </section>
 
@@ -177,23 +133,30 @@ function App() {
 
           <section className="event-section planning-section">
             <div className="section-heading">
-              <h2>Past events</h2>
+              <button
+                type="button"
+                className="section-toggle"
+                aria-expanded={isPastExpanded}
+                onClick={() => setIsPastExpanded((expanded) => !expanded)}
+              >
+                <span className="toggle-marker" aria-hidden="true">
+                  {isPastExpanded ? '−' : '+'}
+                </span>
+                <h2>Past events</h2>
+              </button>
               <span>{pastEvents.length}</span>
             </div>
-            {pastEvents.length ? (
-              <div className="event-grid tentative-grid">
-                {pastEvents.map((event) => (
-                  <EventCard
-                    event={event}
-                    onSelect={setSelectedEvent}
-                    key={event.id}
-                    compact
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="empty-state">No past events match these filters.</div>
-            )}
+            {isPastExpanded ? (
+              pastEvents.length ? (
+                <div className="event-grid tentative-grid">
+                  {pastEvents.map((event) => (
+                    <EventCard event={event} onSelect={setSelectedEvent} key={event.id} compact />
+                  ))}
+                </div>
+              ) : (
+                <div className="empty-state">No past events.</div>
+              )
+            ) : null}
           </section>
         </div>
       </main>
