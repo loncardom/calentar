@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import eventLocationsData from '../data/eventLocations.json';
 import type { SummerEvent } from '../types/Event';
-import { formatTimeRange, getEventDateLabel, sortEventsChronologically } from '../utils/dates';
+import { getEventDateLabel, sortEventsChronologically } from '../utils/dates';
 import {
   getEventEmoji,
   getLocationLine,
@@ -151,7 +151,6 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
     mappedEvents.forEach((event) => {
       const coordinates = eventLocations[event.id];
       const compactDate = getCompactDateLabel(event);
-      const timeLabel = formatTimeRange(event.startTime, event.endTime);
       const locationLine = getLocationLine(event);
       const markerHtml = `
         <div class="event-map-pin category-${event.category} status-${event.status}">
@@ -162,7 +161,7 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
       const popupHtml = `
         <div class="event-map-popup">
           <strong>${escapeHtml(event.title)}</strong>
-          <span>${escapeHtml(getEventDateLabel(event))}${timeLabel ? ` · ${escapeHtml(timeLabel)}` : ''}</span>
+          <span>${escapeHtml(getEventDateLabel(event))}</span>
           <span>${escapeHtml(locationLine)}</span>
           <em>${escapeHtml(statusLabel[event.status])}</em>
         </div>
