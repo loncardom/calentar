@@ -35,8 +35,13 @@ const formatLastUpdatedDate = (value: string) => {
   if (Number.isNaN(date.getTime())) return null;
 
   return new Intl.DateTimeFormat('en-CA', {
-    dateStyle: 'medium',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
     timeZone: 'America/Toronto',
+    timeZoneName: 'short',
   }).format(date);
 };
 
@@ -176,8 +181,8 @@ function App() {
       </main>
 
       {lastUpdatedLabel ? (
-        <footer className="site-footer" title={lastUpdatedAt}>
-          Last updated {lastUpdatedLabel}
+        <footer className="site-footer" title={`${lastUpdatedAt} · America/Toronto`}>
+          Last updated {lastUpdatedLabel} Toronto time
         </footer>
       ) : null}
 
