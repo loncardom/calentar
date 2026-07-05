@@ -140,6 +140,9 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
       markerLayerRef.current = L.layerGroup().addTo(mapRef.current);
     }
 
+    if (!mapRef.current || !markerLayerRef.current) return undefined;
+
+    const map = mapRef.current;
     const markerLayer = markerLayerRef.current;
     markerLayer.clearLayers();
 
@@ -181,13 +184,13 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
     });
 
     if (bounds.length) {
-      mapRef.current.fitBounds(bounds, {
+      map.fitBounds(bounds, {
         maxZoom: 11,
         padding: [30, 30],
       });
     }
 
-    window.setTimeout(() => mapRef.current?.invalidateSize(), 0);
+    window.setTimeout(() => map.invalidateSize(), 0);
 
     return undefined;
   }, [isMapReady, mappedEvents]);
