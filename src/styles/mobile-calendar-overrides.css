@@ -1,3 +1,33 @@
+.icon-button {
+  justify-content: center;
+}
+
+.section-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+
+.toggle-marker {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--soft);
+  font-size: 0.72rem;
+  font-weight: 850;
+  line-height: 1;
+}
+
 @media (width <= 560px) {
   .calendar-event {
     min-height: 18px;
