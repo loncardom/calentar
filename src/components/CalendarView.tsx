@@ -172,7 +172,7 @@ export function CalendarView({
                     }}
                   >
                     {segment.showLabel ? (
-                      <span style={{ overflowWrap: 'anywhere', wordBreak: 'break-word' }}>
+                      <span style={{ overflowWrap: 'anywhere', wordBreak: 'break-all' }}>
                         {getEventEmoji(segment.event)} {segment.event.title}
                       </span>
                     ) : null}
