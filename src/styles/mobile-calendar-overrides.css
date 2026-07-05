@@ -145,8 +145,8 @@
 
   .event-modal {
     width: 100%;
-    max-height: 88vh;
-    max-height: 88dvh;
+    max-height: 95vh;
+    max-height: 95dvh;
     border-bottom: 0;
     border-radius: 18px 18px 0 0;
     transform: translateY(var(--sheet-drag-y, 0px));
