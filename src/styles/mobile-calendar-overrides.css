@@ -36,6 +36,15 @@
   line-height: 1;
 }
 
+.site-footer {
+  margin-top: 30px;
+  color: rgba(102, 100, 92, 0.46);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  text-align: center;
+}
+
 .sheet-drag-indicator {
   display: none;
 }
