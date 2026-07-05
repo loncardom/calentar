@@ -9,7 +9,7 @@ import {
   UserRound,
   X,
 } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { SummerEvent } from '../types/Event';
 import { formatLongDate, formatTimeRange, parseEventDate } from '../utils/dates';
 import { getGoogleMapsUrl } from '../utils/maps';
@@ -25,15 +25,37 @@ interface EventModalProps {
   onClose: () => void;
 }
 
+const closeAnimationMs = 220;
+
 export function EventModal({ event, onClose }: EventModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
   const onCloseRef = useRef(onClose);
   const modalHistoryEntryRef = useRef<string | null>(null);
+  const [renderedEvent, setRenderedEvent] = useState<SummerEvent | null>(event);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
+
+  useEffect(() => {
+    if (event) {
+      setRenderedEvent(event);
+      setIsClosing(false);
+      return undefined;
+    }
+
+    if (!renderedEvent) return undefined;
+
+    setIsClosing(true);
+    const timeout = window.setTimeout(() => {
+      setRenderedEvent(null);
+      setIsClosing(false);
+    }, closeAnimationMs);
+
+    return () => window.clearTimeout(timeout);
+  }, [event, renderedEvent]);
 
   useEffect(() => {
     if (!event) return undefined;
@@ -72,7 +94,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
   }, [event]);
 
   useEffect(() => {
-    if (!event) return undefined;
+    if (!renderedEvent) return undefined;
 
     const previousFocus = document.activeElement instanceof HTMLElement
       ? document.activeElement
@@ -114,32 +136,32 @@ export function EventModal({ event, onClose }: EventModalProps) {
       document.body.classList.remove('modal-open');
       previousFocus?.focus();
     };
-  }, [event, onClose]);
+  }, [renderedEvent, onClose]);
 
-  if (!event) return null;
+  if (!renderedEvent) return null;
 
-  const mapsUrl = getGoogleMapsUrl(event.address, event.locationName, event.city);
-  const primaryLink = event.ticketUrl || event.eventUrl;
-  const exactDate = parseEventDate(event.date);
-  const timeLabel = formatTimeRange(event.startTime, event.endTime) || 'TBD';
+  const mapsUrl = getGoogleMapsUrl(renderedEvent.address, renderedEvent.locationName, renderedEvent.city);
+  const primaryLink = renderedEvent.ticketUrl || renderedEvent.eventUrl;
+  const exactDate = parseEventDate(renderedEvent.date);
+  const timeLabel = formatTimeRange(renderedEvent.startTime, renderedEvent.endTime) || 'TBD';
 
   return (
     <div
-      className="modal-backdrop"
+      className={`modal-backdrop ${isClosing ? 'closing' : ''}`}
       role="presentation"
       onMouseDown={(mouseEvent) => {
         if (mouseEvent.target === mouseEvent.currentTarget) onClose();
       }}
     >
       <section
-        className={`event-modal category-${event.category} status-${event.status}`}
+        className={`event-modal category-${renderedEvent.category} status-${renderedEvent.status}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="event-modal-title"
         ref={panelRef}
       >
         <div className="modal-banner" aria-hidden="true">
-          {getEventEmoji(event)}
+          {getEventEmoji(renderedEvent)}
           <button
             type="button"
             className="modal-close"
@@ -153,13 +175,13 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
         <div className="modal-content">
           <div className="modal-title-row">
-            <h2 id="event-modal-title">{event.title}</h2>
-            <span className={`status-badge ${event.status}`}>
-              {statusLabel[event.status]}
+            <h2 id="event-modal-title">{renderedEvent.title}</h2>
+            <span className={`status-badge ${renderedEvent.status}`}>
+              {statusLabel[renderedEvent.status]}
             </span>
           </div>
 
-          <p className="modal-description">{event.description}</p>
+          <p className="modal-description">{renderedEvent.description}</p>
 
           <dl className="detail-grid">
             <div>
@@ -167,7 +189,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 <CalendarClock aria-hidden="true" size={13} />
                 Date
               </dt>
-              <dd>{exactDate ? formatLongDate(exactDate) : event.dateLabel || 'TBD'}</dd>
+              <dd>{exactDate ? formatLongDate(exactDate) : renderedEvent.dateLabel || 'TBD'}</dd>
             </div>
             <div>
               <dt>
@@ -182,9 +204,9 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 Location
               </dt>
               <dd>
-                {getLocationLine(event)}
-                {event.address || event.city ? (
-                  <span>{[event.address, event.city].filter(Boolean).join(', ')}</span>
+                {getLocationLine(renderedEvent)}
+                {renderedEvent.address || renderedEvent.city ? (
+                  <span>{[renderedEvent.address, renderedEvent.city].filter(Boolean).join(', ')}</span>
                 ) : null}
               </dd>
             </div>
@@ -193,7 +215,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 <PiggyBank aria-hidden="true" size={13} />
                 Cost
               </dt>
-              <dd>{event.costLabel || getCostBadgeLabel(event)}</dd>
+              <dd>{renderedEvent.costLabel || getCostBadgeLabel(renderedEvent)}</dd>
             </div>
             <div>
               <dt>
@@ -201,8 +223,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 Getting there
               </dt>
               <dd>
-                {event.driver ? <strong>{event.driver}</strong> : 'Driver TBD'}
-                {event.transportationNotes ? <span>{event.transportationNotes}</span> : null}
+                {renderedEvent.driver ? <strong>{renderedEvent.driver}</strong> : 'Driver TBD'}
+                {renderedEvent.transportationNotes ? <span>{renderedEvent.transportationNotes}</span> : null}
               </dd>
             </div>
             <div>
@@ -210,15 +232,15 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 <UserRound aria-hidden="true" size={13} />
                 Organizer
               </dt>
-              <dd>{event.organizer || 'TBD'}</dd>
+              <dd>{renderedEvent.organizer || 'TBD'}</dd>
             </div>
           </dl>
 
           <div className="attendee-block">
             <h3>Attendees</h3>
             <div className="attendee-chips">
-              {event.attendees.length
-                ? event.attendees.map((attendee) => (
+              {renderedEvent.attendees.length
+                ? renderedEvent.attendees.map((attendee) => (
                     <span className="attendee-chip" key={attendee}>
                       {attendee}
                     </span>
@@ -227,16 +249,16 @@ export function EventModal({ event, onClose }: EventModalProps) {
             </div>
           </div>
 
-          {event.notes || event.imagePrompt ? (
+          {renderedEvent.notes || renderedEvent.imagePrompt ? (
             <div className="detail-section notes-section">
               <h3>
                 <NotebookTabs aria-hidden="true" size={14} />
                 Planning notes
               </h3>
-              {event.notes ? <p>{event.notes}</p> : null}
-              {event.imagePrompt ? (
+              {renderedEvent.notes ? <p>{renderedEvent.notes}</p> : null}
+              {renderedEvent.imagePrompt ? (
                 <p className="image-prompt">
-                  <strong>Image prompt:</strong> {event.imagePrompt}
+                  <strong>Image prompt:</strong> {renderedEvent.imagePrompt}
                 </p>
               ) : null}
             </div>
