@@ -42,10 +42,10 @@
 }
 
 .card-banner {
-  height: 68px;
   justify-content: flex-start;
-  gap: 8px;
-  padding: 10px 12px;
+  gap: 6px;
+  height: 52px;
+  padding: 8px 10px;
   font-size: 1.65rem;
 }
 
