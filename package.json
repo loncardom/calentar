@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "node scripts/write-build-info.mjs && vite",
     "build": "node scripts/write-build-info.mjs && tsc -b && vite build",
     "preview": "vite preview"
   },
