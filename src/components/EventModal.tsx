@@ -6,7 +6,6 @@ import {
   MapPin,
   NotebookTabs,
   PiggyBank,
-  UserRound,
   X,
 } from 'lucide-react';
 import { useEffect, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
@@ -167,6 +166,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
   const mapsUrl = getGoogleMapsUrl(renderedEvent.address, renderedEvent.locationName, renderedEvent.city);
   const primaryLink = renderedEvent.ticketUrl || renderedEvent.eventUrl;
   const exactDate = parseEventDate(renderedEvent.date);
+  const dateLabel = exactDate ? formatLongDate(exactDate) : renderedEvent.dateLabel || 'TBD';
   const timeLabel = formatTimeRange(renderedEvent.startTime, renderedEvent.endTime) || 'TBD';
   const modalStyle = { '--sheet-drag-y': `${dragOffset}px` } as CSSProperties;
 
@@ -332,16 +332,12 @@ export function EventModal({ event, onClose }: EventModalProps) {
             <div>
               <dt>
                 <CalendarClock aria-hidden="true" size={13} />
-                Date
+                Date & time
               </dt>
-              <dd>{exactDate ? formatLongDate(exactDate) : renderedEvent.dateLabel || 'TBD'}</dd>
-            </div>
-            <div>
-              <dt>
-                <CalendarClock aria-hidden="true" size={13} />
-                Time
-              </dt>
-              <dd>{timeLabel}</dd>
+              <dd>
+                {dateLabel}
+                {timeLabel !== 'TBD' ? <span>{timeLabel}</span> : null}
+              </dd>
             </div>
             <div>
               <dt>
@@ -372,13 +368,6 @@ export function EventModal({ event, onClose }: EventModalProps) {
                 {renderedEvent.transportationNotes ? <span>{renderedEvent.transportationNotes}</span> : null}
               </dd>
             </div>
-            <div>
-              <dt>
-                <UserRound aria-hidden="true" size={13} />
-                Organizer
-              </dt>
-              <dd>{renderedEvent.organizer || 'TBD'}</dd>
-            </div>
           </dl>
 
           <div className="attendee-block">
@@ -394,18 +383,13 @@ export function EventModal({ event, onClose }: EventModalProps) {
             </div>
           </div>
 
-          {renderedEvent.notes || renderedEvent.imagePrompt ? (
+          {renderedEvent.notes ? (
             <div className="detail-section notes-section">
               <h3>
                 <NotebookTabs aria-hidden="true" size={14} />
                 Planning notes
               </h3>
-              {renderedEvent.notes ? <p>{renderedEvent.notes}</p> : null}
-              {renderedEvent.imagePrompt ? (
-                <p className="image-prompt">
-                  <strong>Image prompt:</strong> {renderedEvent.imagePrompt}
-                </p>
-              ) : null}
+              <p>{renderedEvent.notes}</p>
             </div>
           ) : null}
 
