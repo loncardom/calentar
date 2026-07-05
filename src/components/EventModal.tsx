@@ -26,6 +26,7 @@ interface EventModalProps {
 }
 
 const closeAnimationMs = 220;
+const dragActivationThreshold = 6;
 const dragDismissThreshold = 80;
 
 export function EventModal({ event, onClose }: EventModalProps) {
@@ -35,6 +36,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
   const modalHistoryEntryRef = useRef<string | null>(null);
   const dragStartYRef = useRef<number | null>(null);
   const dragPointerIdRef = useRef<number | null>(null);
+  const hasActiveDragRef = useRef(false);
+  const suppressBannerClickRef = useRef(false);
   const [renderedEvent, setRenderedEvent] = useState<SummerEvent | null>(event);
   const [isClosing, setIsClosing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
@@ -52,6 +55,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
       setDragOffset(0);
       dragStartYRef.current = null;
       dragPointerIdRef.current = null;
+      hasActiveDragRef.current = false;
+      suppressBannerClickRef.current = false;
       return undefined;
     }
 
@@ -65,6 +70,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
       setDragOffset(0);
       dragStartYRef.current = null;
       dragPointerIdRef.current = null;
+      hasActiveDragRef.current = false;
+      suppressBannerClickRef.current = false;
     }, closeAnimationMs);
 
     return () => window.clearTimeout(timeout);
@@ -162,6 +169,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
   const resetDrag = () => {
     dragStartYRef.current = null;
     dragPointerIdRef.current = null;
+    hasActiveDragRef.current = false;
     setIsDragging(false);
     setDragOffset(0);
   };
@@ -174,10 +182,10 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
     dragStartYRef.current = pointerEvent.clientY;
     dragPointerIdRef.current = pointerEvent.pointerId;
-    setIsDragging(true);
+    hasActiveDragRef.current = false;
     setDragOffset(0);
     pointerEvent.currentTarget.setPointerCapture(pointerEvent.pointerId);
-    pointerEvent.preventDefault();
+    pointerEvent.stopPropagation();
   };
 
   const handleDragPointerMove = (pointerEvent: PointerEvent<HTMLDivElement>) => {
@@ -188,12 +196,20 @@ export function EventModal({ event, onClose }: EventModalProps) {
       return;
     }
 
-    const nextOffset = Math.max(0, pointerEvent.clientY - dragStartYRef.current);
-    setDragOffset(nextOffset);
+    const rawOffset = pointerEvent.clientY - dragStartYRef.current;
+    const nextOffset = Math.max(0, rawOffset);
 
-    if (nextOffset > 0) {
-      pointerEvent.preventDefault();
+    if (!hasActiveDragRef.current) {
+      if (rawOffset < dragActivationThreshold) return;
+
+      hasActiveDragRef.current = true;
+      suppressBannerClickRef.current = true;
+      setIsDragging(true);
     }
+
+    setDragOffset(nextOffset);
+    pointerEvent.preventDefault();
+    pointerEvent.stopPropagation();
   };
 
   const handleDragPointerUp = (pointerEvent: PointerEvent<HTMLDivElement>) => {
@@ -205,12 +221,22 @@ export function EventModal({ event, onClose }: EventModalProps) {
     }
 
     const nextOffset = Math.max(0, pointerEvent.clientY - dragStartYRef.current);
+    const wasDragging = hasActiveDragRef.current;
+
     dragStartYRef.current = null;
     dragPointerIdRef.current = null;
+    hasActiveDragRef.current = false;
     setIsDragging(false);
 
     if (pointerEvent.currentTarget.hasPointerCapture(pointerEvent.pointerId)) {
       pointerEvent.currentTarget.releasePointerCapture(pointerEvent.pointerId);
+    }
+
+    pointerEvent.stopPropagation();
+
+    if (!wasDragging) {
+      setDragOffset(0);
+      return;
     }
 
     if (nextOffset >= dragDismissThreshold) {
@@ -248,6 +274,14 @@ export function EventModal({ event, onClose }: EventModalProps) {
       >
         <div
           className="modal-banner"
+          onClick={(mouseEvent) => {
+            mouseEvent.stopPropagation();
+
+            if (suppressBannerClickRef.current) {
+              mouseEvent.preventDefault();
+              suppressBannerClickRef.current = false;
+            }
+          }}
           onPointerDown={handleDragPointerDown}
           onPointerMove={handleDragPointerMove}
           onPointerUp={handleDragPointerUp}
