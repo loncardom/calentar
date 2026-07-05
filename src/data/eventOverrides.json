@@ -2,5 +2,16 @@
   "bread-and-honey-festival": {
     "startTime": "14:00",
     "endTime": "18:00"
+  },
+  "tony-anthony-bourdain-movie": {
+    "calendarStartDate": "2026-08-01",
+    "calendarEndDate": "2026-08-07",
+    "dateLabel": "August 1-7",
+    "notes": "Tony is scheduled for release in August 2026. Use the first week as the planning window for now, then confirm exact local theatre date and showtimes."
+  },
+  "skydiving-idea": {
+    "calendarStartDate": "2026-09-01",
+    "calendarEndDate": "2026-09-07",
+    "dateLabel": "sometime in September"
   }
 }
