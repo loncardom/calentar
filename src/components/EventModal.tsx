@@ -31,7 +31,7 @@ const dragDismissThreshold = 80;
 
 export function EventModal({ event, onClose }: EventModalProps) {
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
-  const panelRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLElement | null>(null);
   const onCloseRef = useRef(onClose);
   const modalHistoryEntryRef = useRef<string | null>(null);
   const dragStartYRef = useRef<number | null>(null);
@@ -184,8 +184,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
     setDragOffset(0);
   };
 
-  const shouldIgnoreDragTarget = (target: EventTarget | null) =>
-    target instanceof HTMLElement && target.closest('.modal-close');
+  const shouldIgnoreDragTarget = (target: EventTarget | null): boolean =>
+    target instanceof HTMLElement && Boolean(target.closest('.modal-close'));
 
   const handleDragPointerDown = (pointerEvent: PointerEvent<HTMLDivElement>) => {
     if (pointerEvent.button !== 0 || shouldIgnoreDragTarget(pointerEvent.target)) return;
@@ -305,6 +305,9 @@ export function EventModal({ event, onClose }: EventModalProps) {
           <span className="modal-banner-emoji" aria-hidden="true">
             {getEventEmoji(renderedEvent)}
           </span>
+          <h2 id="event-modal-title" className="modal-banner-title">
+            {renderedEvent.title}
+          </h2>
           <button
             type="button"
             className="modal-close"
@@ -318,7 +321,6 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
         <div className="modal-content">
           <div className="modal-title-row">
-            <h2 id="event-modal-title">{renderedEvent.title}</h2>
             <span className={`status-badge ${renderedEvent.status}`}>
               {statusLabel[renderedEvent.status]}
             </span>
