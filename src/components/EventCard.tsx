@@ -62,16 +62,12 @@ export function EventCard({ event, onSelect, compact = false }: EventCardProps) 
       onClick={() => onSelect(event)}
       onKeyDown={handleKeyDown}
     >
-      <div className="card-banner" aria-hidden="true">
-        {event.image ? <img src={event.image} alt="" /> : getEventEmoji(event)}
+      <div className="card-banner">
+        {event.image ? <img src={event.image} alt="" /> : <span aria-hidden="true">{getEventEmoji(event)}</span>}
+        <h3>{event.title}</h3>
       </div>
 
       <div className="event-card-body">
-        <div className="card-top">
-          <h3>{event.title}</h3>
-          <span className={`status-dot ${event.status}`} aria-label={event.status} />
-        </div>
-
         <p className="card-date">
           <CalendarClock aria-hidden="true" size={13} />
           {getEventDateLabel(event)}
