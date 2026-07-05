@@ -41,6 +41,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
   const [renderedEvent, setRenderedEvent] = useState<SummerEvent | null>(event);
   const [isClosing, setIsClosing] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isDragDismissing, setIsDragDismissing] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
       setRenderedEvent(event);
       setIsClosing(false);
       setIsDragging(false);
+      setIsDragDismissing(false);
       setDragOffset(0);
       dragStartYRef.current = null;
       dragPointerIdRef.current = null;
@@ -67,6 +69,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
       setRenderedEvent(null);
       setIsClosing(false);
       setIsDragging(false);
+      setIsDragDismissing(false);
       setDragOffset(0);
       dragStartYRef.current = null;
       dragPointerIdRef.current = null;
@@ -124,6 +127,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
     const handleKeyDown = (keyboardEvent: KeyboardEvent) => {
       if (keyboardEvent.key === 'Escape') {
+        setIsDragDismissing(false);
         onClose();
         return;
       }
@@ -166,11 +170,17 @@ export function EventModal({ event, onClose }: EventModalProps) {
   const timeLabel = formatTimeRange(renderedEvent.startTime, renderedEvent.endTime) || 'TBD';
   const modalStyle = { '--sheet-drag-y': `${dragOffset}px` } as CSSProperties;
 
+  const closeNormally = () => {
+    setIsDragDismissing(false);
+    onClose();
+  };
+
   const resetDrag = () => {
     dragStartYRef.current = null;
     dragPointerIdRef.current = null;
     hasActiveDragRef.current = false;
     setIsDragging(false);
+    setIsDragDismissing(false);
     setDragOffset(0);
   };
 
@@ -183,6 +193,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
     dragStartYRef.current = pointerEvent.clientY;
     dragPointerIdRef.current = pointerEvent.pointerId;
     hasActiveDragRef.current = false;
+    setIsDragDismissing(false);
     setDragOffset(0);
     pointerEvent.currentTarget.setPointerCapture(pointerEvent.pointerId);
     pointerEvent.stopPropagation();
@@ -226,7 +237,6 @@ export function EventModal({ event, onClose }: EventModalProps) {
     dragStartYRef.current = null;
     dragPointerIdRef.current = null;
     hasActiveDragRef.current = false;
-    setIsDragging(false);
 
     if (pointerEvent.currentTarget.hasPointerCapture(pointerEvent.pointerId)) {
       pointerEvent.currentTarget.releasePointerCapture(pointerEvent.pointerId);
@@ -235,16 +245,20 @@ export function EventModal({ event, onClose }: EventModalProps) {
     pointerEvent.stopPropagation();
 
     if (!wasDragging) {
+      setIsDragging(false);
       setDragOffset(0);
       return;
     }
 
     if (nextOffset >= dragDismissThreshold) {
-      setDragOffset(nextOffset);
+      setIsDragging(false);
+      setIsDragDismissing(true);
+      setDragOffset(Math.max(window.innerHeight, nextOffset + 420));
       onClose();
       return;
     }
 
+    setIsDragging(false);
     setDragOffset(0);
   };
 
@@ -258,14 +272,14 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
   return (
     <div
-      className={`modal-backdrop ${isClosing ? 'closing' : ''}`}
+      className={`modal-backdrop ${isClosing ? 'closing' : ''} ${isDragDismissing ? 'drag-dismissing' : ''}`}
       role="presentation"
       onMouseDown={(mouseEvent) => {
-        if (mouseEvent.target === mouseEvent.currentTarget) onClose();
+        if (mouseEvent.target === mouseEvent.currentTarget) closeNormally();
       }}
     >
       <section
-        className={`event-modal category-${renderedEvent.category} status-${renderedEvent.status} ${isDragging ? 'dragging' : ''}`}
+        className={`event-modal category-${renderedEvent.category} status-${renderedEvent.status} ${isDragging ? 'dragging' : ''} ${isDragDismissing ? 'drag-dismissing' : ''}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="event-modal-title"
@@ -294,7 +308,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
           <button
             type="button"
             className="modal-close"
-            onClick={onClose}
+            onClick={closeNormally}
             ref={closeButtonRef}
             aria-label="Close details"
           >
