@@ -19,12 +19,80 @@ interface EventLocation {
 }
 
 type LeafletApi = any;
+type Coordinate = [number, number];
 
 const eventLocations = eventLocationsData as Record<string, EventLocation>;
 const leafletCssId = 'leaflet-css';
 const leafletScriptId = 'leaflet-js';
 const leafletCssUrl = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const leafletScriptUrl = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+
+const ttcLines: Array<{ id: string; name: string; color: string; points: Coordinate[] }> = [
+  {
+    id: 'line-1',
+    name: 'Line 1',
+    color: '#f8c300',
+    points: [
+      [43.794, -79.527],
+      [43.775, -79.512],
+      [43.762, -79.491],
+      [43.749, -79.462],
+      [43.741, -79.444],
+      [43.724, -79.406],
+      [43.704, -79.397],
+      [43.668, -79.399],
+      [43.654, -79.388],
+      [43.646, -79.381],
+      [43.652, -79.377],
+      [43.671, -79.386],
+      [43.706, -79.398],
+      [43.761, -79.411],
+      [43.781, -79.415],
+    ],
+  },
+  {
+    id: 'line-2',
+    name: 'Line 2',
+    color: '#009b3a',
+    points: [
+      [43.637, -79.535],
+      [43.645, -79.524],
+      [43.650, -79.484],
+      [43.655, -79.459],
+      [43.668, -79.399],
+      [43.671, -79.386],
+      [43.676, -79.358],
+      [43.689, -79.301],
+      [43.732, -79.263],
+    ],
+  },
+  {
+    id: 'line-4',
+    name: 'Line 4',
+    color: '#a05eb5',
+    points: [
+      [43.761, -79.411],
+      [43.766, -79.386],
+      [43.771, -79.365],
+      [43.775, -79.346],
+    ],
+  },
+];
+
+const homeBases: Array<{ id: string; label: string; shortLabel: string; coordinates: Coordinate }> = [
+  {
+    id: 'erin-mills-town-centre',
+    label: 'Erin Mills Town Centre homebase',
+    shortLabel: 'EM',
+    coordinates: [43.5584, -79.7115],
+  },
+  {
+    id: 'bloor-yonge',
+    label: 'Bloor-Yonge homebase',
+    shortLabel: 'BY',
+    coordinates: [43.671, -79.386],
+  },
+];
 
 const escapeHtml = (value: string) =>
   value.replace(/[&<>'"]/g, (character) => {
@@ -92,6 +160,8 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
   const mapElementRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletApi | null>(null);
   const markerLayerRef = useRef<LeafletApi | null>(null);
+  const transitLayerRef = useRef<LeafletApi | null>(null);
+  const homeBaseLayerRef = useRef<LeafletApi | null>(null);
   const onSelectRef = useRef(onSelect);
   const [isMapReady, setIsMapReady] = useState(false);
   const [mapError, setMapError] = useState(false);
@@ -137,49 +207,82 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapRef.current);
 
+      transitLayerRef.current = L.layerGroup().addTo(mapRef.current);
+      homeBaseLayerRef.current = L.layerGroup().addTo(mapRef.current);
       markerLayerRef.current = L.layerGroup().addTo(mapRef.current);
     }
 
-    if (!mapRef.current || !markerLayerRef.current) return undefined;
+    if (!mapRef.current || !markerLayerRef.current || !transitLayerRef.current || !homeBaseLayerRef.current) {
+      return undefined;
+    }
 
     const map = mapRef.current;
     const markerLayer = markerLayerRef.current;
+    const transitLayer = transitLayerRef.current;
+    const homeBaseLayer = homeBaseLayerRef.current;
     markerLayer.clearLayers();
+    transitLayer.clearLayers();
+    homeBaseLayer.clearLayers();
 
-    const bounds: Array<[number, number]> = [];
+    const bounds: Coordinate[] = [];
+
+    ttcLines.forEach((line) => {
+      L.polyline(line.points, {
+        color: line.color,
+        weight: 5,
+        opacity: 0.82,
+        lineCap: 'round',
+        lineJoin: 'round',
+      }).addTo(transitLayer);
+    });
+
+    homeBases.forEach((homeBase) => {
+      const markerHtml = `
+        <div class="homebase-map-pin homebase-${homeBase.id}">
+          <span class="homebase-map-pin-icon">⌂</span>
+          <span class="homebase-map-pin-label">${escapeHtml(homeBase.shortLabel)}</span>
+        </div>
+      `;
+
+      L.marker(homeBase.coordinates, {
+        interactive: false,
+        title: homeBase.label,
+        icon: L.divIcon({
+          className: 'homebase-map-marker-shell',
+          html: markerHtml,
+          iconSize: [58, 32],
+          iconAnchor: [29, 32],
+        }),
+      }).addTo(homeBaseLayer);
+
+      bounds.push(homeBase.coordinates);
+    });
 
     mappedEvents.forEach((event) => {
       const coordinates = eventLocations[event.id];
+      const coordinatePair: Coordinate = [coordinates.lat, coordinates.lng];
       const compactDate = getCompactDateLabel(event);
-      const locationLine = getLocationLine(event);
       const markerHtml = `
         <div class="event-map-pin category-${event.category} status-${event.status}">
           <span class="event-map-pin-emoji">${escapeHtml(getEventEmoji(event))}</span>
           <span class="event-map-pin-date">${escapeHtml(compactDate)}</span>
         </div>
       `;
-      const popupHtml = `
-        <div class="event-map-popup">
-          <strong>${escapeHtml(event.title)}</strong>
-          <span>${escapeHtml(getEventDateLabel(event))}</span>
-          <span>${escapeHtml(locationLine)}</span>
-          <em>${escapeHtml(statusLabel[event.status])}</em>
-        </div>
-      `;
 
-      const marker = L.marker([coordinates.lat, coordinates.lng], {
+      const marker = L.marker(coordinatePair, {
         icon: L.divIcon({
           className: 'event-map-marker-shell',
           html: markerHtml,
           iconSize: [72, 34],
           iconAnchor: [36, 34],
-          popupAnchor: [0, -32],
         }),
       }).addTo(markerLayer);
 
-      marker.bindPopup(popupHtml);
-      marker.on('click', () => onSelectRef.current(event));
-      bounds.push([coordinates.lat, coordinates.lng]);
+      marker.on('click', (leafletEvent: { originalEvent?: MouseEvent }) => {
+        leafletEvent.originalEvent?.preventDefault();
+        onSelectRef.current(event);
+      });
+      bounds.push(coordinatePair);
     });
 
     if (bounds.length) {
@@ -198,6 +301,8 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
     mapRef.current?.remove();
     mapRef.current = null;
     markerLayerRef.current = null;
+    transitLayerRef.current = null;
+    homeBaseLayerRef.current = null;
   }, []);
 
   return (
@@ -220,6 +325,12 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
         ) : null}
         {!mapError && !isMapReady ? <div className="map-empty-state">Loading map…</div> : null}
         <div className="event-map" ref={mapElementRef} />
+        <div className="map-legend" aria-label="Map legend">
+          <span><b className="legend-line legend-line-1" />TTC 1</span>
+          <span><b className="legend-line legend-line-2" />TTC 2</span>
+          <span><b className="legend-line legend-line-4" />TTC 4</span>
+          <span><b className="legend-homebase" />Homebase</span>
+        </div>
       </section>
 
       <section className="map-event-list" aria-label="Mapped events">
