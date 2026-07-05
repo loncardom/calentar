@@ -226,6 +226,7 @@
 
   .event-modal {
     width: 100%;
+    height: auto;
     max-height: 95vh;
     max-height: 95dvh;
     border: 0;
@@ -236,11 +237,6 @@
     animation-name: modal-sheet-in;
     animation-duration: 260ms;
     animation-timing-function: cubic-bezier(0.2, 0.9, 0.2, 1);
-  }
-
-  .event-modal:has(.notes-section) {
-    height: 95vh;
-    height: 95dvh;
   }
 
   .event-modal.dragging {
