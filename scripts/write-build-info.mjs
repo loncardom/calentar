@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const targetPath = resolve(rootDir, 'src/generated/buildInfo.ts');
+const fallbackRepository = 'loncardom/calentar';
 
 function resolveGitDir() {
   const dotGitPath = resolve(rootDir, '.git');
@@ -22,7 +23,62 @@ function resolveGitDir() {
   return resolve(rootDir, gitDirMatch[1]);
 }
 
-function getLastCommitDate() {
+function getCurrentCommitSha() {
+  const envSha = process.env.GITHUB_SHA
+    ?? process.env.CF_PAGES_COMMIT_SHA
+    ?? process.env.VERCEL_GIT_COMMIT_SHA
+    ?? process.env.COMMIT_REF;
+
+  if (envSha) return envSha;
+
+  const gitDir = resolveGitDir();
+  if (!gitDir) return null;
+
+  const headPath = resolve(gitDir, 'HEAD');
+  if (!existsSync(headPath)) return null;
+
+  const headContents = readFileSync(headPath, 'utf8').trim();
+  const refMatch = headContents.match(/^ref: (.+)$/);
+
+  if (!refMatch) return headContents;
+
+  const refPath = resolve(gitDir, refMatch[1]);
+  if (existsSync(refPath)) {
+    return readFileSync(refPath, 'utf8').trim();
+  }
+
+  const packedRefsPath = resolve(gitDir, 'packed-refs');
+  if (!existsSync(packedRefsPath)) return null;
+
+  const packedRef = readFileSync(packedRefsPath, 'utf8')
+    .split('\n')
+    .find((line) => line.endsWith(` ${refMatch[1]}`));
+
+  return packedRef?.split(' ')[0] ?? null;
+}
+
+async function getCommitDateFromGitHub() {
+  const repository = process.env.GITHUB_REPOSITORY ?? fallbackRepository;
+  const commitSha = getCurrentCommitSha();
+  const commitRef = commitSha ?? 'main';
+  const url = `https://api.github.com/repos/${repository}/commits/${commitRef}`;
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    ...(process.env.GITHUB_TOKEN ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` } : {}),
+  };
+
+  try {
+    const response = await fetch(url, { headers });
+    if (!response.ok) return null;
+
+    const commit = await response.json();
+    return commit?.commit?.committer?.date ?? commit?.commit?.author?.date ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function getFallbackDate() {
   const gitDir = resolveGitDir();
 
   if (gitDir) {
@@ -46,7 +102,7 @@ function getLastCommitDate() {
   return new Date().toISOString();
 }
 
-const lastUpdatedAt = getLastCommitDate();
+const lastUpdatedAt = await getCommitDateFromGitHub() ?? getFallbackDate();
 
 mkdirSync(dirname(targetPath), { recursive: true });
 writeFileSync(
