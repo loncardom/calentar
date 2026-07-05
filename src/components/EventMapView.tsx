@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import eventLocationsData from '../data/eventLocations.json';
 import type { SummerEvent } from '../types/Event';
-import { getEventDateLabel, sortEventsChronologically } from '../utils/dates';
+import { getEventDateLabel, isPastEvent, sortEventsChronologically } from '../utils/dates';
 import {
   getEventEmoji,
   getLocationLine,
-  statusLabel,
 } from '../utils/presentation';
 
 interface EventMapViewProps {
@@ -26,58 +25,6 @@ const leafletCssId = 'leaflet-css';
 const leafletScriptId = 'leaflet-js';
 const leafletCssUrl = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const leafletScriptUrl = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-
-const ttcLines: Array<{ id: string; name: string; color: string; points: Coordinate[] }> = [
-  {
-    id: 'line-1',
-    name: 'Line 1',
-    color: '#f8c300',
-    points: [
-      [43.794, -79.527],
-      [43.775, -79.512],
-      [43.762, -79.491],
-      [43.749, -79.462],
-      [43.741, -79.444],
-      [43.724, -79.406],
-      [43.704, -79.397],
-      [43.668, -79.399],
-      [43.654, -79.388],
-      [43.646, -79.381],
-      [43.652, -79.377],
-      [43.671, -79.386],
-      [43.706, -79.398],
-      [43.761, -79.411],
-      [43.781, -79.415],
-    ],
-  },
-  {
-    id: 'line-2',
-    name: 'Line 2',
-    color: '#009b3a',
-    points: [
-      [43.637, -79.535],
-      [43.645, -79.524],
-      [43.650, -79.484],
-      [43.655, -79.459],
-      [43.668, -79.399],
-      [43.671, -79.386],
-      [43.676, -79.358],
-      [43.689, -79.301],
-      [43.732, -79.263],
-    ],
-  },
-  {
-    id: 'line-4',
-    name: 'Line 4',
-    color: '#a05eb5',
-    points: [
-      [43.761, -79.411],
-      [43.766, -79.386],
-      [43.771, -79.365],
-      [43.775, -79.346],
-    ],
-  },
-];
 
 const homeBases: Array<{ id: string; label: string; shortLabel: string; coordinates: Coordinate }> = [
   {
@@ -160,14 +107,13 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
   const mapElementRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<LeafletApi | null>(null);
   const markerLayerRef = useRef<LeafletApi | null>(null);
-  const transitLayerRef = useRef<LeafletApi | null>(null);
   const homeBaseLayerRef = useRef<LeafletApi | null>(null);
   const onSelectRef = useRef(onSelect);
   const [isMapReady, setIsMapReady] = useState(false);
   const [mapError, setMapError] = useState(false);
 
   const mappedEvents = useMemo(
-    () => sortEventsChronologically(events.filter((event) => eventLocations[event.id])),
+    () => sortEventsChronologically(events.filter((event) => !isPastEvent(event) && eventLocations[event.id])),
     [events],
   );
   const skippedCount = events.length - mappedEvents.length;
@@ -207,34 +153,21 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(mapRef.current);
 
-      transitLayerRef.current = L.layerGroup().addTo(mapRef.current);
       homeBaseLayerRef.current = L.layerGroup().addTo(mapRef.current);
       markerLayerRef.current = L.layerGroup().addTo(mapRef.current);
     }
 
-    if (!mapRef.current || !markerLayerRef.current || !transitLayerRef.current || !homeBaseLayerRef.current) {
+    if (!mapRef.current || !markerLayerRef.current || !homeBaseLayerRef.current) {
       return undefined;
     }
 
     const map = mapRef.current;
     const markerLayer = markerLayerRef.current;
-    const transitLayer = transitLayerRef.current;
     const homeBaseLayer = homeBaseLayerRef.current;
     markerLayer.clearLayers();
-    transitLayer.clearLayers();
     homeBaseLayer.clearLayers();
 
     const bounds: Coordinate[] = [];
-
-    ttcLines.forEach((line) => {
-      L.polyline(line.points, {
-        color: line.color,
-        weight: 5,
-        opacity: 0.82,
-        lineCap: 'round',
-        lineJoin: 'round',
-      }).addTo(transitLayer);
-    });
 
     homeBases.forEach((homeBase) => {
       const markerHtml = `
@@ -301,7 +234,6 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
     mapRef.current?.remove();
     mapRef.current = null;
     markerLayerRef.current = null;
-    transitLayerRef.current = null;
     homeBaseLayerRef.current = null;
   }, []);
 
@@ -313,8 +245,8 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
           <p className="eyebrow">Event map</p>
           <h1>Mapped plans</h1>
           <p>
-            {mappedEvents.length} event locations shown
-            {skippedCount > 0 ? ` · ${skippedCount} without coordinates hidden` : ''}
+            {mappedEvents.length} upcoming event locations shown
+            {skippedCount > 0 ? ` · ${skippedCount} past or unmapped events hidden` : ''}
           </p>
         </div>
       </header>
@@ -326,9 +258,6 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
         {!mapError && !isMapReady ? <div className="map-empty-state">Loading map…</div> : null}
         <div className="event-map" ref={mapElementRef} />
         <div className="map-legend" aria-label="Map legend">
-          <span><b className="legend-line legend-line-1" />TTC 1</span>
-          <span><b className="legend-line legend-line-2" />TTC 2</span>
-          <span><b className="legend-line legend-line-4" />TTC 4</span>
           <span><b className="legend-homebase" />Homebase</span>
         </div>
       </section>
