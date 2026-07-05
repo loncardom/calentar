@@ -1,5 +1,15 @@
 .modal-backdrop {
   z-index: 10000;
+  pointer-events: auto;
+}
+
+.event-modal,
+.modal-close {
+  pointer-events: auto;
+}
+
+.modal-close {
+  z-index: 10001;
 }
 
 .homebase-map-marker-shell,
