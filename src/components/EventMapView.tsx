@@ -26,17 +26,15 @@ const leafletScriptId = 'leaflet-js';
 const leafletCssUrl = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
 const leafletScriptUrl = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
 
-const homeBases: Array<{ id: string; label: string; shortLabel: string; coordinates: Coordinate }> = [
+const homeBases: Array<{ id: string; label: string; coordinates: Coordinate }> = [
   {
     id: 'erin-mills-town-centre',
     label: 'Erin Mills Town Centre homebase',
-    shortLabel: 'EM',
     coordinates: [43.5584, -79.7115],
   },
   {
     id: 'bloor-yonge',
     label: 'Bloor-Yonge homebase',
-    shortLabel: 'BY',
     coordinates: [43.671, -79.386],
   },
 ];
@@ -171,9 +169,8 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
 
     homeBases.forEach((homeBase) => {
       const markerHtml = `
-        <div class="homebase-map-pin homebase-${homeBase.id}">
+        <div class="homebase-map-pin homebase-${homeBase.id}" aria-hidden="true">
           <span class="homebase-map-pin-icon">⌂</span>
-          <span class="homebase-map-pin-label">${escapeHtml(homeBase.shortLabel)}</span>
         </div>
       `;
 
@@ -183,8 +180,8 @@ export function EventMapView({ events, onSelect }: EventMapViewProps) {
         icon: L.divIcon({
           className: 'homebase-map-marker-shell',
           html: markerHtml,
-          iconSize: [58, 32],
-          iconAnchor: [29, 32],
+          iconSize: [28, 28],
+          iconAnchor: [14, 28],
         }),
       }).addTo(homeBaseLayer);
 
