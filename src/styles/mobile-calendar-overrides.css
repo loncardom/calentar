@@ -55,17 +55,21 @@
 }
 
 .card-banner > span,
-.card-banner h3 {
+.card-banner h3,
+.modal-banner-emoji,
+.modal-banner-title {
   position: relative;
   z-index: 1;
 }
 
-.card-banner > span {
+.card-banner > span,
+.modal-banner-emoji {
   flex: 0 0 auto;
   line-height: 1;
 }
 
-.card-banner h3 {
+.card-banner h3,
+.modal-banner-title {
   max-width: calc(100% - 38px);
   color: var(--accent);
   font-size: 0.84rem;
@@ -76,6 +80,12 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.modal-banner-title {
+  min-width: 0;
+  flex: 1;
+  margin: 0;
 }
 
 .card-date,
@@ -89,34 +99,12 @@
 
 .modal-banner {
   justify-content: flex-start;
-  align-items: flex-start;
-  gap: 8px;
-  min-height: 78px;
-  height: auto;
-  padding: 18px 52px 14px 18px;
+  align-items: center;
+  gap: 6px;
+  height: 52px;
+  padding: 8px 50px 8px 10px;
+  font-size: 1.65rem;
   text-align: left;
-}
-
-.modal-banner-emoji {
-  position: relative;
-  z-index: 1;
-  flex: 0 0 auto;
-  line-height: 1;
-}
-
-.modal-banner-title {
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  min-width: 0;
-  margin: 0;
-  color: var(--accent);
-  font-size: 0.92rem;
-  font-weight: 820;
-  line-height: 1.18;
-  overflow: visible;
-  overflow-wrap: anywhere;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.38);
 }
 
 .site-footer {
@@ -241,6 +229,7 @@
     max-height: 95dvh;
     border: 0;
     border-radius: 18px 18px 0 0;
+    background: linear-gradient(135deg, var(--card-a) 0%, var(--card-b) 100%);
     transform: translateY(var(--sheet-drag-y, 0px));
     transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1);
     animation-name: modal-sheet-in;
@@ -264,9 +253,9 @@
   }
 
   .event-modal .modal-banner {
-    min-height: 68px;
-    gap: 7px;
-    padding: 22px 50px 12px 16px;
+    height: 62px;
+    gap: 6px;
+    padding: 18px 50px 8px 10px;
     cursor: grab;
     touch-action: none;
     user-select: none;
@@ -276,13 +265,9 @@
     cursor: grabbing;
   }
 
-  .modal-banner-title {
-    font-size: 0.84rem;
-  }
-
   .sheet-drag-indicator {
     position: absolute;
-    top: 9px;
+    top: 8px;
     left: 50%;
     width: 42px;
     height: 4px;
@@ -309,6 +294,7 @@
   }
 
   .modal-content {
+    background: var(--surface);
     padding-bottom: calc(20px + env(safe-area-inset-bottom));
   }
 }
