@@ -3,6 +3,20 @@
     "startTime": "14:00",
     "endTime": "18:00"
   },
+  "odyssey-imax-watch": {
+    "date": "2026-07-27",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "startTime": "19:00",
+    "endTime": null,
+    "dateLabel": null,
+    "locationName": "Square One Mississauga",
+    "address": "100 City Centre Drive",
+    "city": "Mississauga, ON",
+    "description": "Watch Christopher Nolan's The Odyssey at Square One Mississauga.",
+    "transportationNotes": "Meet at Square One Mississauga for the 7:00 PM show.",
+    "notes": "Scheduled for Monday, July 27, 2026 at 7:00 PM in Square One Mississauga. Confirm exact theatre, seats, and ticket price before booking."
+  },
   "tony-anthony-bourdain-movie": {
     "calendarStartDate": "2026-08-01",
     "calendarEndDate": "2026-08-07",
