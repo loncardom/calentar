@@ -52,5 +52,31 @@
     "image": null,
     "imagePrompt": "A relaxed summer kayaking trip on Toronto's Humber River, with two friends paddling through calm green water near Old Mill and city nature in the background.",
     "notes": "Picked Saturday, June 20, 2026 from 1 PM to 3 PM as a near-term weekend placeholder. Toronto Adventures lists 2-hour rentals May-October 2026. Included gear: boat, paddle, PFD/life jacket, Coast Guard safety kit, and a brief orientation. Paddlers must be comfortable treading water with a PFD and reaching shore. Late return fee is $20 per 15 minutes per boat. Confirm weather and availability before booking."
+  },
+  {
+    "id": "mexican-independence-day-nathan-phillips",
+    "title": "Mexican Independence Day at Nathan Phillips",
+    "status": "planning",
+    "category": "food",
+    "date": "2026-09-16",
+    "startTime": null,
+    "endTime": null,
+    "dateLabel": null,
+    "locationName": "Nathan Phillips Square",
+    "address": "100 Queen Street West",
+    "city": "Toronto, ON",
+    "description": "Mexican Independence Day celebration at Nathan Phillips Square.",
+    "attendees": ["Dom"],
+    "organizer": null,
+    "driver": null,
+    "transportationNotes": "Take TTC to downtown if possible; parking around City Hall can be busy during events.",
+    "costLabel": "Free / food costs TBD",
+    "costAmount": null,
+    "currency": "CAD",
+    "ticketUrl": null,
+    "eventUrl": null,
+    "image": null,
+    "imagePrompt": null,
+    "notes": "Placeholder for Mexican Independence Day in September at Nathan Phillips Square. Exact event date, hours, vendors, and program still need confirmation."
   }
 ]
