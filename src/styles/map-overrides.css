@@ -69,6 +69,29 @@
   line-height: 1;
 }
 
+.legend-line {
+  width: 18px;
+  height: 4px;
+  display: inline-block;
+  border-radius: 999px;
+}
+
+.legend-line-1 {
+  background: #f8c300;
+}
+
+.legend-line-2 {
+  background: #009b3a;
+}
+
+.legend-line-3 {
+  background: #0083c9;
+}
+
+.legend-line-4 {
+  background: #a05eb5;
+}
+
 .legend-homebase {
   width: 10px;
   height: 10px;
