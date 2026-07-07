@@ -12,6 +12,11 @@
   z-index: 10001;
 }
 
+.modal-close svg,
+.modal-close svg * {
+  pointer-events: none;
+}
+
 .homebase-map-marker-shell,
 .event-map-marker-shell {
   border: 0;
