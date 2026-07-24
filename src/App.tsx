@@ -86,7 +86,7 @@ function App() {
   return (
     <div className="app-shell">
       {isMapRoute ? (
-        <EventMapView events={calendarEvents} onSelect={setSelectedEvent} />
+        <EventMapView events={activeEvents} onSelect={setSelectedEvent} />
       ) : (
         <main>
           <div className="tiles-view">
