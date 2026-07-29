@@ -18,14 +18,43 @@
     "notes": "Scheduled for Monday, July 27, 2026 at 7:00 PM in Square One Mississauga. Confirm exact theatre, seats, and ticket price before booking."
   },
   "tony-anthony-bourdain-movie": {
-    "calendarStartDate": "2026-08-01",
-    "calendarEndDate": "2026-08-07",
-    "dateLabel": "August 1-7",
-    "notes": "Tony is scheduled for release in August 2026. Use the first week as the planning window for now, then confirm exact local theatre date and showtimes."
+    "date": "2026-08-18",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "dateLabel": null,
+    "notes": "Planned for Tuesday, August 18, 2026. Confirm the local theatre, showtime, and ticket availability before booking."
   },
   "skydiving-idea": {
     "calendarStartDate": "2026-09-01",
     "calendarEndDate": "2026-09-07",
     "dateLabel": "sometime in September"
+  },
+  "beach-day": {
+    "date": "2026-08-15",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "dateLabel": null,
+    "notes": "Scheduled for Saturday, August 15, 2026 at 10:00 AM. Tubing requires online tickets in advance; day-use admission is separate. Elora Quarry swimming is at a separate property and requires a separate session ticket and parking permit."
+  },
+  "taste-of-manila-2026": {
+    "date": "2026-08-16",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "dateLabel": null,
+    "notes": "Scheduled for Sunday, August 16, 2026. Official listed hours are 9:00 AM to 8:00 PM. The festival lists 150+ vendors and multiple entertainment stages."
+  },
+  "secret-city-lost-and-found": {
+    "date": "2026-08-01",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "dateLabel": null,
+    "notes": "Scheduled for Saturday, August 1, 2026 from 11:00 AM to 4:00 PM. Recommended team size is 2-4 players and listed play time is 2-4 hours. Confirm tickets before going."
+  },
+  "sosa-gliding-intro-flight": {
+    "date": "2026-09-05",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "dateLabel": null,
+    "notes": "Planned for Saturday, September 5, 2026. Intro flights are about 20-30 minutes with one passenger at a time. The flight must be pre-purchased online before scheduling."
   }
 }
