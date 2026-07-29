@@ -1,4 +1,5 @@
 import type { SummerEvent } from '../types/Event';
+import { additionalFestivalEvents } from './additionalFestivalEvents';
 
 const topsCalendarUrl = 'https://www.topictureshow.com/2026-calendar';
 
@@ -152,4 +153,8 @@ const topsEvents: SummerEvent[] = topsScreenings.map((screening) => {
   };
 });
 
-export const summer2026Events: SummerEvent[] = [...festivalEvents, ...topsEvents];
+export const summer2026Events: SummerEvent[] = [
+  ...festivalEvents,
+  ...additionalFestivalEvents,
+  ...topsEvents,
+];
