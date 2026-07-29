@@ -134,5 +134,53 @@
   "tops-closing-night-2026": {
     "lat": 43.664875,
     "lng": -79.421039
+  },
+  "taste-of-india-toronto-2026": {
+    "lat": 43.6527,
+    "lng": -79.3839
+  },
+  "ghanafest-toronto-2026": {
+    "lat": 43.7513,
+    "lng": -79.4295
+  },
+  "habari-africa-toronto-2026": {
+    "lat": 43.63884,
+    "lng": -79.381996
+  },
+  "afrofest-toronto-2026": {
+    "lat": 43.6649,
+    "lng": -79.31285
+  },
+  "india-day-festival-parade-toronto-2026": {
+    "lat": 43.6527,
+    "lng": -79.3839
+  },
+  "yorkville-murals-festival-2026": {
+    "lat": 43.671224,
+    "lng": -79.390447
+  },
+  "afro-carib-fest-toronto-2026": {
+    "lat": 43.7585,
+    "lng": -79.2543
+  },
+  "mabuhay-philippines-festival-2026": {
+    "lat": 43.6527,
+    "lng": -79.3839
+  },
+  "trinbago-toronto-festival-2026": {
+    "lat": 43.6527,
+    "lng": -79.3839
+  },
+  "toronto-dragon-festival-2026": {
+    "lat": 43.6527,
+    "lng": -79.3839
+  },
+  "taste-of-the-kingsway-2026": {
+    "lat": 43.6474,
+    "lng": -79.5113
+  },
+  "roncesvalles-polish-festival-2026": {
+    "lat": 43.6486,
+    "lng": -79.4504
   }
 }
