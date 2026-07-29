@@ -4,6 +4,7 @@ import additionalEventsData from './data/additionalEvents.json';
 import farmEventsData from './data/farmEvents.json';
 import eventOverridesData from './data/eventOverrides.json';
 import restaurantsData from './data/restaurants.json';
+import { summer2026Events } from './data/summer2026Events';
 import { CalendarView } from './components/CalendarView';
 import { EventCard } from './components/EventCard';
 import { EventMapView } from './components/EventMapView';
@@ -21,14 +22,18 @@ import {
 } from './utils/dates';
 
 const eventOverrides = eventOverridesData as Record<string, Partial<SummerEvent>>;
+const removedEventIds = new Set(['matisse-ago-impressionist-revolution']);
 const events = ([
   ...(eventsData as SummerEvent[]),
   ...(additionalEventsData as SummerEvent[]),
+  ...summer2026Events,
   ...(farmEventsData as SummerEvent[]),
-]).map((event) => ({
-  ...event,
-  ...(eventOverrides[event.id] ?? {}),
-}));
+])
+  .map((event) => ({
+    ...event,
+    ...(eventOverrides[event.id] ?? {}),
+  }))
+  .filter((event) => !removedEventIds.has(event.id));
 const restaurants = restaurantsData as Restaurant[];
 
 const formatLastUpdatedDate = (value: string) => {
