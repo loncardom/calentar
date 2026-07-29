@@ -18,11 +18,18 @@
     "notes": "Scheduled for Monday, July 27, 2026 at 7:00 PM in Square One Mississauga. Confirm exact theatre, seats, and ticket price before booking."
   },
   "tony-anthony-bourdain-movie": {
+    "date": "2026-08-25",
+    "calendarStartDate": null,
+    "calendarEndDate": null,
+    "dateLabel": null,
+    "notes": "Planned for Tuesday, August 25, 2026. Confirm the local theatre, showtime, and ticket availability before booking."
+  },
+  "rom-psychedelics-exhibition": {
     "date": "2026-08-18",
     "calendarStartDate": null,
     "calendarEndDate": null,
     "dateLabel": null,
-    "notes": "Planned for Tuesday, August 18, 2026. Confirm the local theatre, showtime, and ticket availability before booking."
+    "notes": "Scheduled for Tuesday, August 18, 2026 during ROM's Third Tuesday Night Free window from 4:00 PM to 8:30 PM. Special exhibitions are not included, so Psychedelics still has a $9 surcharge. Confirm pricing and reserve a timed ticket before going."
   },
   "skydiving-idea": {
     "calendarStartDate": "2026-09-01",
