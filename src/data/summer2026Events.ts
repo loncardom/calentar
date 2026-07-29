@@ -98,15 +98,6 @@ type TopsScreening = {
 };
 
 const topsScreenings: TopsScreening[] = [
-  { id: 'nirvanna-the-band-the-show-the-movie', title: 'Nirvanna the Band the Show the Movie', date: '2026-06-26', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'one-of-them-days', title: 'One of Them Days', date: '2026-06-27', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'gueros', title: 'Güeros', date: '2026-06-28', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'back-to-the-future', title: 'Back to the Future', date: '2026-07-02', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
-  { id: 'arrival', title: 'Arrival', date: '2026-07-05', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'the-muppet-movie', title: 'The Muppet Movie', date: '2026-07-12', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'it-must-be-heaven', title: 'It Must Be Heaven', date: '2026-07-19', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'it-was-just-an-accident', title: 'It Was Just an Accident', date: '2026-07-23', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
-  { id: 'o-brother-where-art-thou', title: 'O Brother, Where Art Thou?', date: '2026-07-26', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
   { id: 'speed', title: 'Speed', date: '2026-07-30', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
   { id: 'titanic', title: 'Titanic', date: '2026-08-02', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
   { id: 'wildhood', title: 'Wildhood', date: '2026-08-06', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
