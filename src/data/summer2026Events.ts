@@ -93,25 +93,27 @@ type TopsScreening = {
   id: string;
   title: string;
   date: string;
+  showtime: string;
   locationName: string;
   address: string;
 };
 
 const topsScreenings: TopsScreening[] = [
-  { id: 'speed', title: 'Speed', date: '2026-07-30', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
-  { id: 'titanic', title: 'Titanic', date: '2026-08-02', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'wildhood', title: 'Wildhood', date: '2026-08-06', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
-  { id: 'thelma-and-louise', title: 'Thelma & Louise', date: '2026-08-09', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'the-queen-of-my-dreams', title: 'The Queen of My Dreams', date: '2026-08-13', locationName: 'Bell Manor Park', address: '1 Bayside Lane' },
-  { id: 'the-princess-bride', title: 'The Princess Bride', date: '2026-08-14', locationName: 'Bell Manor Park', address: '1 Bayside Lane' },
-  { id: 'paddington', title: 'Paddington', date: '2026-08-15', locationName: 'Bell Manor Park', address: '1 Bayside Lane' },
-  { id: 'faces-places', title: 'Faces Places', date: '2026-08-16', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'gentlemen-prefer-blondes', title: 'Gentlemen Prefer Blondes', date: '2026-08-22', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
-  { id: 'closing-night', title: 'Closing Night — Audience Choice Film', date: '2026-08-23', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
+  { id: 'speed', title: 'Speed', date: '2026-07-30', showtime: '20:45', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
+  { id: 'titanic', title: 'Titanic', date: '2026-08-02', showtime: '20:30', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
+  { id: 'wildhood', title: 'Wildhood', date: '2026-08-06', showtime: '20:45', locationName: 'Corktown Common', address: '155 Bayview Avenue' },
+  { id: 'thelma-and-louise', title: 'Thelma & Louise', date: '2026-08-09', showtime: '20:30', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
+  { id: 'the-queen-of-my-dreams', title: 'The Queen of My Dreams', date: '2026-08-13', showtime: '20:30', locationName: 'Bell Manor Park', address: '1 Bayside Lane' },
+  { id: 'the-princess-bride', title: 'The Princess Bride', date: '2026-08-14', showtime: '20:30', locationName: 'Bell Manor Park', address: '1 Bayside Lane' },
+  { id: 'paddington', title: 'Paddington', date: '2026-08-15', showtime: '20:30', locationName: 'Bell Manor Park', address: '1 Bayside Lane' },
+  { id: 'faces-places', title: 'Faces Places', date: '2026-08-16', showtime: '20:30', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
+  { id: 'gentlemen-prefer-blondes', title: 'Gentlemen Prefer Blondes', date: '2026-08-22', showtime: '20:30', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
+  { id: 'closing-night', title: 'Closing Night — Audience Choice Film', date: '2026-08-23', showtime: '20:30', locationName: 'Christie Pits Park', address: '750 Bloor Street West' },
 ];
 
 const topsEvents: SummerEvent[] = topsScreenings.map((screening) => {
   const isBellManor = screening.locationName === 'Bell Manor Park';
+  const isCorktown = screening.locationName === 'Corktown Common';
   const isClosingNight = screening.id === 'closing-night';
 
   return {
@@ -122,7 +124,7 @@ const topsEvents: SummerEvent[] = topsScreenings.map((screening) => {
     date: screening.date,
     calendarStartDate: null,
     calendarEndDate: null,
-    startTime: isBellManor ? '20:30' : null,
+    startTime: screening.showtime,
     endTime: null,
     dateLabel: null,
     locationName: screening.locationName,
@@ -141,10 +143,12 @@ const topsEvents: SummerEvent[] = topsScreenings.map((screening) => {
     image: null,
     imagePrompt: `An outdoor summer movie screening of ${screening.title} in ${screening.locationName}, with a large screen, blankets, park lawn, Toronto scenery, and a relaxed evening crowd.`,
     notes: isBellManor
-      ? 'Showtime is approximately 8:30 PM, with food and family arts activities beginning at 6 PM.'
+      ? 'Approximate showtime is 8:30 PM at sundown, with snacks and family arts activities beginning at 6 PM.'
       : isClosingNight
-        ? 'Audience-choice closing night; the selected feature film was not yet announced. Food is available from 6 PM and the film starts at sundown.'
-        : 'Food is available before the screening and the film starts at sundown. Bring a blanket or chairs; no ticket is required.',
+        ? 'Audience-choice closing night; the selected feature film was not yet announced. Approximate showtime is 8:30 PM at sundown, with food available from 6 PM.'
+        : isCorktown
+          ? 'Approximate showtime is 8:45 PM at sundown, with food available from 7 PM. Bring a blanket or chairs; no ticket is required.'
+          : 'Approximate showtime is 8:30 PM at sundown, with food available from 6 PM. Bring a blanket or chairs; no ticket is required.',
   };
 });
 
