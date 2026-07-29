@@ -12,10 +12,11 @@ import { lastUpdatedAt } from './generated/buildInfo';
 import type { SummerEvent } from './types/Event';
 import type { Restaurant } from './types/Restaurant';
 import {
+  getCalendarRange,
   hasExactDate,
   isPastEvent,
-  parseEventDate,
   sortEventsChronologically,
+  startOfDay,
   startOfMonth,
 } from './utils/dates';
 
@@ -58,10 +59,18 @@ const getRestaurantUrl = (restaurant: Restaurant) => {
 };
 
 function App() {
-  const firstDatedEvent = sortEventsChronologically(events).find((event) =>
-    hasExactDate(event) && !isPastEvent(event),
-  );
-  const initialMonth = startOfMonth(parseEventDate(firstDatedEvent?.date ?? null) ?? new Date());
+  const today = startOfDay(new Date());
+  const firstUpcomingCalendarDate = events.reduce<Date | null>((earliest, event) => {
+    const range = getCalendarRange(event);
+    if (!range || range.startDate.getTime() < today.getTime()) return earliest;
+
+    if (!earliest || range.startDate.getTime() < earliest.getTime()) {
+      return range.startDate;
+    }
+
+    return earliest;
+  }, null);
+  const initialMonth = startOfMonth(firstUpcomingCalendarDate ?? new Date());
   const isMapRoute = window.location.pathname.replace(/\/+$/, '') === '/map';
 
   const [selectedEvent, setSelectedEvent] = useState<SummerEvent | null>(null);
